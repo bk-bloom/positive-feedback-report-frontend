@@ -2,13 +2,14 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
-  height: 100vh;
+  height: 100%;
   width: 280px;
-  position: absolute;
+  position: fixed;
   display: flex;
   flex-direction: column;
   align-items: center;
   background: #ff812c;
+  border-right: 1px solid #e9ecef;
 `;
 
 const Logo = styled.img`
@@ -21,8 +22,12 @@ const Item = styled.div`
   text-align: center;
   width: 100%;
   padding: 20px 0;
-  color: white;
+  color: black;
   cursor: pointer;
+  transition: all 0.2s;
+  &:hover {
+    color: white;
+  }
 `;
 
 function Sidebar() {

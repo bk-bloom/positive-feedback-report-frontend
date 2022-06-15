@@ -9,6 +9,7 @@ const Container = styled.div`
   // justify-content: center;
   align-items: center;
   height: 100vh;
+  margin-left: 280px;
 `;
 const Wrapper = styled.div`
   width: 60%;
@@ -53,6 +54,23 @@ const Button = styled.button`
   font-weight: bold;
 `;
 
+const FloatingButton = styled.div`
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ff812c;
+  color: white;
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  cursor: pointer;
+  border-radius: 25px;
+  // border: 1px solid black;
+  font-size: 24px;
+`;
+
 function App() {
   const [name, setName] = useState("");
 
@@ -77,6 +95,7 @@ function App() {
           <Button onClick={handleClick}>검색</Button>
         </InputContainer>
       </Wrapper>
+      <FloatingButton>+</FloatingButton>
     </Container>
   );
 }

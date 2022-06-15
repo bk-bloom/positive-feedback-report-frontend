@@ -25,6 +25,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   height: ${(props) => (props.isLoading ? "100vh" : "auto")};
+  margin-left: 280px;
 `;
 const Wrapper = styled.div`
   width: 60%;
@@ -170,7 +171,6 @@ function Report() {
   const location = useLocation();
   console.log(location.state.name);
   useEffect(() => {
-
     // Dummy Data
     const result = RESULT;
     setStrengthWords(result.strengthWords);
@@ -198,7 +198,7 @@ function Report() {
   const handleDownloadPdf = async () => {
     const element = printRef.current;
     const canvas = await html2canvas(element, {
-      scale: 1,
+      scale: 2,
     });
     const data = canvas.toDataURL("image/png");
 
@@ -268,7 +268,11 @@ function Report() {
           <CommentContainer>
             <CommentSection>
               {/* <CommentSectionTitle>감사와<br />응원을<br />보냅니다</CommentSectionTitle> */}
-              <CommentSectionTitle><span>감사와</span><span>응원을</span><span>보냅니다</span></CommentSectionTitle>
+              <CommentSectionTitle>
+                <span>감사와</span>
+                <span>응원을</span>
+                <span>보냅니다</span>
+              </CommentSectionTitle>
               <CommentSectionList>
                 {appreciateComments.map((comment, index) => (
                   <CommentSectionItem key={index}>
@@ -278,7 +282,10 @@ function Report() {
               </CommentSectionList>
             </CommentSection>
             <CommentSection>
-              <CommentSectionTitle><span>앞으로</span><span>기대합니다</span></CommentSectionTitle>
+              <CommentSectionTitle>
+                <span>앞으로</span>
+                <span>기대합니다</span>
+              </CommentSectionTitle>
               <CommentSectionList>
                 {expectComments.map((comment, index) => (
                   <CommentSectionItem key={index}>
