@@ -3,9 +3,11 @@ import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import ReactLoading from "react-loading";
 import { getData } from "../api";
-import { RESULT } from "../db";
+import { POSITIVE_RESULT, RESULT } from "../db";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
+import Wordcloud from "../components/Wordcloud";
+import ReportCover from "../components/ReportCover";
 
 const COLORS = [
   "#CC2B69",
@@ -160,29 +162,38 @@ const DownloadButton = styled.div`
 `;
 
 function Report() {
-  const [strengthWords, setStrengthWords] = useState([]);
-  const [valueWords, setValueWords] = useState([]);
-  const [appreciateComments, setAppreciateComments] = useState([]);
-  const [expectComments, setExpectComments] = useState([]);
+  const [reportData, setReportData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const printRef = useRef();
 
   const location = useLocation();
   console.log(location.state.name);
+  console.log(reportData);
   useEffect(() => {
     // Dummy Data
-    const result = RESULT;
-    setStrengthWords(result.strengthWords);
-    setValueWords(result.valueWords);
-    setAppreciateComments(result.appreciateComments);
-    setExpectComments(result.expectComments);
+    const result = POSITIVE_RESULT;
+    setReportData([
+      result.strengthWords,
+      result.valueWords,
+      result.appreciateComments,
+      result.expectComments,
+    ]);
+    // setStrengthWords(result.strengthWords);
+    // setValueWords(result.valueWords);
+    // setAppreciateComments(result.appreciateComments);
+    // setExpectComments(result.expectComments);
 
     // setTimeout(() => {
     //   setIsLoading(false);
     // }, 2000);
 
     // API Data
+    async function fetchData() {
+      await getData();
+    }
+
+    // fetchData();
     // getData(location.state.name).then((result) => {
     //   console.log(result);
     //   setStrengthWords(result.strengthWords);
@@ -225,6 +236,7 @@ function Report() {
         </>
       ) : (
         <Wrapper ref={printRef}>
+          <ReportCover />
           <HeaderTopContainer>
             {COLORS.map((color) => (
               <HeaderTopBorder bgColor={color} />
@@ -237,14 +249,15 @@ function Report() {
             <Section>
               <SectionHeader>구성원들이 보는 나의 강점</SectionHeader>
               <SectionSubTitle>TOP 3</SectionSubTitle>
-              <SectionTopWords>
+              <Wordcloud data={reportData[0]} />
+              {/* <SectionTopWords>
                 {strengthWords.slice(0, 3).map((word, index) => (
                   <TopWords key={index}>{word[0]}</TopWords>
                 ))}
-              </SectionTopWords>
+              </SectionTopWords> */}
               <SectionSubTitle>강점 단어 모음</SectionSubTitle>
               <SectionAllWords>
-                {strengthWords.map((word, index) => (
+                {reportData[0].map((word, index) => (
                   <AllWords key={index}>{`${word[0]} (${word[1]})`}</AllWords>
                 ))}
               </SectionAllWords>
@@ -252,14 +265,15 @@ function Report() {
             <Section>
               <SectionHeader>구성원들이 보는 나의 가치</SectionHeader>
               <SectionSubTitle>TOP 3</SectionSubTitle>
-              <SectionTopWords>
+              <Wordcloud data={reportData[1]} />
+              {/* <SectionTopWords>
                 {valueWords.slice(0, 3).map((word, index) => (
                   <TopWords key={index}>{word[0]}</TopWords>
                 ))}
-              </SectionTopWords>
+              </SectionTopWords> */}
               <SectionSubTitle>가치 단어 모음</SectionSubTitle>
               <SectionAllWords>
-                {valueWords.map((word, index) => (
+                {reportData[1].map((word, index) => (
                   <AllWords key={index}>{`${word[0]} (${word[1]})`}</AllWords>
                 ))}
               </SectionAllWords>
@@ -274,7 +288,7 @@ function Report() {
                 <span>보냅니다</span>
               </CommentSectionTitle>
               <CommentSectionList>
-                {appreciateComments.map((comment, index) => (
+                {reportData[2].map((comment, index) => (
                   <CommentSectionItem key={index}>
                     - {comment}
                   </CommentSectionItem>
@@ -287,7 +301,7 @@ function Report() {
                 <span>기대합니다</span>
               </CommentSectionTitle>
               <CommentSectionList>
-                {expectComments.map((comment, index) => (
+                {reportData[3].map((comment, index) => (
                   <CommentSectionItem key={index}>
                     - {comment}
                   </CommentSectionItem>

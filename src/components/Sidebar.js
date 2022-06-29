@@ -8,7 +8,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #ff812c;
+  //   background: #ff812c;
+  background: white;
   border-right: 1px solid #e9ecef;
 `;
 
@@ -26,7 +27,7 @@ const Item = styled.div`
   cursor: pointer;
   transition: all 0.2s;
   &:hover {
-    color: white;
+    color: #ff812c;
   }
 `;
 
@@ -40,7 +41,7 @@ function Sidebar() {
     <Container>
       <Logo src="../assets/logo.png" />
       <Item onClick={() => handleClick("/")}>긍정 피드백 리포트</Item>
-      <Item>준비중</Item>
+      <Item>마음 체크업 리포트 (준비중)</Item>
     </Container>
   );
 }
