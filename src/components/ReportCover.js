@@ -13,10 +13,10 @@ const COLORS = [
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 1150px;
   background-color: #ff812c;
   color: white;
-  margin-bottom: 30px;
+  margin-bottom: 100px;
 `;
 const Wrapper = styled.div`
   display: flex;

@@ -146,7 +146,10 @@ const CommentSectionList = styled.div`
   padding: 5px 10px;
 `;
 
-const CommentSectionItem = styled.p``;
+const CommentSectionItem = styled.p`
+  margin: 4px 0;
+  font-size: 14px;
+`;
 
 const DownloadButton = styled.div`
   width: 50px;
@@ -213,12 +216,42 @@ function Report() {
     });
     const data = canvas.toDataURL("image/png");
 
-    const pdf = new jsPDF();
+    const pdf = new jsPDF("p", "mm", "a4");
     const imgProperties = pdf.getImageProperties(data);
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
 
-    pdf.addImage(data, "PNG", 0, 0, pdfWidth, pdfHeight);
+    const pageHeight = 295;
+    let heightLeft = pdfHeight;
+
+    let position = 0;
+
+    pdf.addImage(
+      data,
+      "PNG",
+      0,
+      position,
+      pdfWidth,
+      pdfHeight,
+      undefined,
+      "FAST"
+    );
+    heightLeft -= pageHeight;
+    while (heightLeft >= 0) {
+      position = heightLeft - pdfHeight;
+      pdf.addPage();
+      pdf.addImage(
+        data,
+        "PNG",
+        0,
+        position,
+        pdfWidth,
+        pdfHeight,
+        undefined,
+        "FAST"
+      );
+      heightLeft -= pageHeight;
+    }
     pdf.save("print.pdf");
   };
 
