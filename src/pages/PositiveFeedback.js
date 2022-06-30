@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
@@ -7,8 +8,8 @@ import {
 } from "../api";
 import { searchResultAtom } from "../atom";
 import HeadSection from "../components/HeadSection";
-import ResultRow from "../components/ResultRow";
-import { sortByName } from "../utils";
+import Loading from "../components/Loading";
+import ResultTable from "../components/ResultTable";
 
 const Container = styled.div`
   padding: 0 40px;
@@ -70,18 +71,12 @@ const FloatingButton = styled.div`
   font-size: 24px;
 `;
 
-const ResultContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin-top: 50px;
-`;
-
 function PositiveFeedback() {
   // const [name, setName] = useState("");
   const [searchResult, setSearchResult] = useRecoilState(searchResultAtom);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSearchDone, setIsSearchDone] = useState(false);
 
-  // console.log("Search Atom => ", searchResult);
   const navigate = useNavigate();
   // const handleChange = (e) => {
   //   setName(e.target.value);
@@ -93,14 +88,18 @@ function PositiveFeedback() {
       surveyInfo: {},
       result: {},
     });
+    setIsSearchDone(false);
   };
   // const handleClick = () => {
   //   navigate("/report", { state: { name } });
   // };
   const handleSurveyNameClick = async () => {
+    setIsLoading(true);
     const collector = await findCollector(searchResult.keyword);
     if (!collector) {
       console.log("검색 결과 없습니다.");
+      setIsLoading(false);
+      return;
     }
 
     const responses = await getCollectorsResponseInBulkByCollectorId(
@@ -117,13 +116,11 @@ function PositiveFeedback() {
         result: responses,
       });
     }
+    setIsLoading(false);
+    setIsSearchDone(true);
   };
 
-  const handleReceiverClick = (key) => {
-    navigate("/positive/report", {
-      state: { name: key, data: searchResult.result[key] },
-    });
-  };
+  console.log("Search Atom => ", searchResult);
   return (
     <Container>
       <Wrapper>
@@ -145,22 +142,14 @@ function PositiveFeedback() {
           />
           <Button onClick={handleSurveyNameClick}>검색</Button>
         </InputContainer>
-        <ResultContainer>
-          {Object.keys(searchResult.result).length > 0 &&
-            Object.keys(searchResult.result)
-              .sort(sortByName)
-              .map((name, index) => (
-                <ResultRow
-                  key={index}
-                  handler={handleReceiverClick}
-                  name={name}
-                  surveyInfo={searchResult.surveyInfo}
-                  data={searchResult.result[name]}
-                >
-                  {name} - ({searchResult.result[name].responseCount})
-                </ResultRow>
-              ))}
-        </ResultContainer>
+        {isLoading ? (
+          <Loading message="검색중..." marginTop="100px" />
+        ) : (
+          <ResultTable
+            searchResult={searchResult}
+            isSearchDone={isSearchDone}
+          />
+        )}
       </Wrapper>
       {/* <FloatingButton>+</FloatingButton> */}
     </Container>

@@ -77,8 +77,8 @@ function ReportCover({ name }) {
   return (
     <Container>
       <HeaderTopContainer>
-        {COLORS.map((color) => (
-          <HeaderTopBorder bgColor={color} />
+        {COLORS.map((color, index) => (
+          <HeaderTopBorder key={index} bgColor={color} />
         ))}
       </HeaderTopContainer>
       <Wrapper>

@@ -6,6 +6,7 @@ import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import Wordcloud from "../components/Wordcloud";
 import ReportCover from "../components/ReportCover";
+import Loading from "../components/Loading";
 
 const COLORS = [
   "#CC2B69",
@@ -231,21 +232,13 @@ function Report() {
   return (
     <Container isLoading={isLoading}>
       {isLoading ? (
-        <>
-          <ReactLoading
-            type={"bars"}
-            color={"black"}
-            height={"100px"}
-            width={"100px"}
-          />
-          <span>리포트 생성중...</span>
-        </>
+        <Loading message="리포트 생성중..." />
       ) : (
         <Wrapper ref={printRef}>
           <ReportCover name={location.state.name} />
           <HeaderTopContainer>
-            {COLORS.map((color) => (
-              <HeaderTopBorder bgColor={color} />
+            {COLORS.map((color, index) => (
+              <HeaderTopBorder key={index} bgColor={color} />
             ))}
           </HeaderTopContainer>
           <Header>

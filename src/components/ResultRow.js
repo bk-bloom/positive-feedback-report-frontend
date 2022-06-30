@@ -3,11 +3,9 @@ import styled from "styled-components";
 const Container = styled.div`
   width: auto;
   border: 1px solid #e2e2e2;
-  padding: 5px 20px;
   margin: 5px 0;
-  cursor: pointer;
   display: flex;
-  height: 50px;
+  height: 60px;
   justify-content: flex-start;
 `;
 
@@ -16,29 +14,40 @@ const Column = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  //   border: 1px solid black;
+  justify-content: space-evenly;
   padding: 0 10px;
   //   margin: 0 10px;
   &:nth-child(1) {
     flex: 1;
   }
+  &:last-child {
+    align-items: flex-end;
+  }
+  // border: 1px solid black;
 `;
 
 const Label = styled.span`
-  font-size: 10px;
+  font-size: 12px;
   color: #888888;
 `;
 
 const Text = styled.span`
-  font-size: 12px;
+  // font-size: 12px;
+`;
+
+const Button = styled.button`
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+  background-color: #ff812c;
+  color: white;
 `;
 
 function ResultRow({ name, data, surveyInfo, handler }) {
   return (
-    <Container onClick={() => handler(name)}>
+    <Container>
       <Column>
-        <Label>이름</Label>
+        <Label>피평가자</Label>
         <Text>{name}</Text>
       </Column>
 
@@ -49,6 +58,9 @@ function ResultRow({ name, data, surveyInfo, handler }) {
       <Column>
         <Label>설문 종류</Label>
         <Text>{surveyInfo.name}</Text>
+      </Column>
+      <Column>
+        <Button onClick={() => handler(name)}>리포트 생성하기</Button>
       </Column>
     </Container>
   );
