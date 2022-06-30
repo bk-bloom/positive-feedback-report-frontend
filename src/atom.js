@@ -4,6 +4,7 @@ export const searchResultAtom = atom({
   key: "searchResultAtom",
   default: {
     keyword: "",
+    surveyInfo: {},
     result: {},
   },
 });

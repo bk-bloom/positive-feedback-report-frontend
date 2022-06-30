@@ -4,6 +4,8 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { findCollector, getCollectorsResponseInBulkByCollectorId } from "./api";
 import { searchResultAtom } from "./atom";
+import ResultRow from "./components/ResultRow";
+import { sortByName } from "./utils";
 
 const Container = styled.div`
   padding: 0 40px;
@@ -81,14 +83,6 @@ const ResultContainer = styled.div`
   margin-top: 50px;
 `;
 
-const ResultRow = styled.div`
-  width: 100%;
-  border: 1px solid #e2e2e2;
-  padding: 10px;
-  margin: 5px 0;
-  cursor: pointer;
-`;
-
 function App() {
   // const [name, setName] = useState("");
   const [searchResult, setSearchResult] = useRecoilState(searchResultAtom);
@@ -102,6 +96,7 @@ function App() {
   const handleSurveyNameChange = (e) => {
     setSearchResult({
       keyword: e.target.value,
+      surveyInfo: {},
       result: {},
     });
   };
@@ -121,10 +116,13 @@ function App() {
     if (responses) {
       setSearchResult({
         keyword: searchResult.keyword,
+        surveyInfo: {
+          name: collector[0].name,
+          id: collector[0].id,
+        },
         result: responses,
       });
     }
-    // navigate("/report", { state: { name } });
   };
 
   const handleReceiverClick = (key) => {
@@ -156,11 +154,19 @@ function App() {
         </InputContainer>
         <ResultContainer>
           {Object.keys(searchResult.result).length > 0 &&
-            Object.keys(searchResult.result).map((name, index) => (
-              <ResultRow key={index} onClick={() => handleReceiverClick(name)}>
-                {name} - ({searchResult.result[name].responseCount})
-              </ResultRow>
-            ))}
+            Object.keys(searchResult.result)
+              .sort(sortByName)
+              .map((name, index) => (
+                <ResultRow
+                  key={index}
+                  handler={handleReceiverClick}
+                  name={name}
+                  surveyInfo={searchResult.surveyInfo}
+                  data={searchResult.result[name]}
+                >
+                  {name} - ({searchResult.result[name].responseCount})
+                </ResultRow>
+              ))}
         </ResultContainer>
       </Wrapper>
       <FloatingButton>+</FloatingButton>
