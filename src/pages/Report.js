@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import ReactLoading from "react-loading";
-import { getData } from "../api";
-import { POSITIVE_RESULT, RESULT } from "../db";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import Wordcloud from "../components/Wordcloud";
@@ -169,41 +167,16 @@ function Report() {
   const [isLoading, setIsLoading] = useState(true);
 
   const printRef = useRef();
-
   const location = useLocation();
-  console.log(location.state.name);
-  console.log(reportData);
+
   useEffect(() => {
-    // Dummy Data
-    const result = POSITIVE_RESULT;
     setReportData([
-      result.strengthWords,
-      result.valueWords,
-      result.appreciateComments,
-      result.expectComments,
+      location.state.data.strengthWords,
+      location.state.data.valuesWords,
+      location.state.data.appreciateComments,
+      location.state.data.expectComments,
     ]);
-    // setStrengthWords(result.strengthWords);
-    // setValueWords(result.valueWords);
-    // setAppreciateComments(result.appreciateComments);
-    // setExpectComments(result.expectComments);
 
-    // setTimeout(() => {
-    //   setIsLoading(false);
-    // }, 2000);
-
-    // API Data
-    async function fetchData() {
-      await getData();
-    }
-
-    // fetchData();
-    // getData(location.state.name).then((result) => {
-    //   console.log(result);
-    //   setStrengthWords(result.strengthWords);
-    //   setValueWords(result.valueWords);
-    //   setAppreciateComments(result.appreciateComments);
-    //   setExpectComments(result.expectComments);
-    // });
     setTimeout(() => {
       setIsLoading(false);
     }, 2000);
@@ -252,7 +225,7 @@ function Report() {
       );
       heightLeft -= pageHeight;
     }
-    pdf.save("print.pdf");
+    pdf.save(`긍정 피드백 설문 결과 - ${location.state.name}.pdf`);
   };
 
   return (
@@ -269,7 +242,7 @@ function Report() {
         </>
       ) : (
         <Wrapper ref={printRef}>
-          <ReportCover />
+          <ReportCover name={location.state.name} />
           <HeaderTopContainer>
             {COLORS.map((color) => (
               <HeaderTopBorder bgColor={color} />

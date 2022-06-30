@@ -73,7 +73,7 @@ const Name = styled.span`
   font-weight: bold;
 `;
 
-function ReportCover() {
+function ReportCover({ name }) {
   return (
     <Container>
       <HeaderTopContainer>
@@ -95,7 +95,7 @@ function ReportCover() {
             </Phrase>
           </ColumnLeft>
           <ColumnRight>
-            <Name>강범규</Name>
+            <Name>{name}</Name>
           </ColumnRight>
         </TitleContainer>
       </Wrapper>
