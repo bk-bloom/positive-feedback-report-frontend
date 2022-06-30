@@ -7,6 +7,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Report from "./pages/Report";
 import Sidebar from "./components/Sidebar";
 import { RecoilRoot } from "recoil";
+import Checkup from "./pages/Checkup";
+import PositiveFeedback from "./pages/PositiveFeedback";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -15,8 +17,10 @@ root.render(
       <RecoilRoot>
         <Sidebar />
         <Routes>
-          <Route path="/" element={<App />} />
-          <Route path="/report" element={<Report />} />
+          <Route path="/" element={<PositiveFeedback />} />
+          <Route path="/positive" element={<PositiveFeedback />} />
+          <Route path="/positive/report" element={<Report />} />
+          <Route path="/checkup" element={<Checkup />} />
         </Routes>
       </RecoilRoot>
     </BrowserRouter>

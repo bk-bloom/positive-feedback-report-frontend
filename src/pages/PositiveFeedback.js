@@ -1,11 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { findCollector, getCollectorsResponseInBulkByCollectorId } from "./api";
-import { searchResultAtom } from "./atom";
-import HeadSection from "./components/HeadSection";
-import ResultRow from "./components/ResultRow";
-import { sortByName } from "./utils";
+import {
+  findCollector,
+  getCollectorsResponseInBulkByCollectorId,
+} from "../api";
+import { searchResultAtom } from "../atom";
+import HeadSection from "../components/HeadSection";
+import ResultRow from "../components/ResultRow";
+import { sortByName } from "../utils";
 
 const Container = styled.div`
   padding: 0 40px;
@@ -74,7 +77,7 @@ const ResultContainer = styled.div`
   margin-top: 50px;
 `;
 
-function App() {
+function PositiveFeedback() {
   // const [name, setName] = useState("");
   const [searchResult, setSearchResult] = useRecoilState(searchResultAtom);
 
@@ -164,4 +167,4 @@ function App() {
   );
 }
 
-export default App;
+export default PositiveFeedback;

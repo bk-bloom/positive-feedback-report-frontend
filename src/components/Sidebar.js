@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -23,9 +23,10 @@ const Item = styled.div`
   text-align: center;
   width: 100%;
   padding: 20px 0;
-  color: black;
+  color: ${(props) => (props.highlight ? "#ff812c" : "black")};
   cursor: pointer;
   transition: all 0.2s;
+
   &:hover {
     color: #ff812c;
   }
@@ -33,15 +34,29 @@ const Item = styled.div`
 
 function Sidebar() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleClick = (to) => {
     navigate(to);
   };
+
   return (
     <Container>
       <Logo src="../assets/logo.png" />
-      <Item onClick={() => handleClick("/")}>긍정 피드백 리포트</Item>
-      <Item>마음 체크업 리포트 (준비중)</Item>
+      <Item
+        onClick={() => handleClick("/positive")}
+        highlight={
+          location.pathname === "/" || location.pathname === "/positive"
+        }
+      >
+        긍정 피드백 리포트
+      </Item>
+      <Item
+        onClick={() => handleClick("/checkup")}
+        highlight={location.pathname === "/checkup"}
+      >
+        마음 체크업 리포트 (준비중)
+      </Item>
     </Container>
   );
 }
