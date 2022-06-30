@@ -99,6 +99,7 @@ function PositiveFeedback() {
     if (!collector) {
       console.log("검색 결과 없습니다.");
       setIsLoading(false);
+      setIsSearchDone(true);
       return;
     }
 
