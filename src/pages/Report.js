@@ -151,9 +151,11 @@ const CommentSectionItem = styled.p`
 `;
 
 const DownloadButton = styled.div`
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
+  padding: 5px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   border: 1px solid black;
@@ -166,6 +168,7 @@ const DownloadButton = styled.div`
 function Report() {
   const [reportData, setReportData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingMsg, setLoadingMsg] = useState("리포트 생성중...");
 
   const printRef = useRef();
   const location = useLocation();
@@ -184,10 +187,13 @@ function Report() {
   }, []);
 
   const handleDownloadPdf = async () => {
+    setLoadingMsg("pdf 다운로드중...");
+    setIsLoading(true);
     const element = printRef.current;
     const canvas = await html2canvas(element, {
       scale: 2,
     });
+
     const data = canvas.toDataURL("image/png");
 
     const pdf = new jsPDF("p", "mm", "a4");
@@ -227,90 +233,99 @@ function Report() {
       heightLeft -= pageHeight;
     }
     pdf.save(`긍정 피드백 설문 결과 - ${location.state.name}.pdf`);
+    setIsLoading(false);
   };
 
   return (
     <Container isLoading={isLoading}>
       {isLoading ? (
-        <Loading message="리포트 생성중..." />
+        <Loading
+          message={loadingMsg}
+          animate={loadingMsg !== "pdf 다운로드중..."}
+        />
       ) : (
-        <Wrapper ref={printRef}>
-          <ReportCover name={location.state.name} />
-          <HeaderTopContainer>
-            {COLORS.map((color, index) => (
-              <HeaderTopBorder key={index} bgColor={color} />
-            ))}
-          </HeaderTopContainer>
-          <Header>
-            <HeaderText>긍정 피드백</HeaderText>
-          </Header>
-          <SectionContainer>
-            <Section>
-              <SectionHeader>구성원들이 보는 나의 강점</SectionHeader>
-              <SectionSubTitle>TOP 3</SectionSubTitle>
-              <Wordcloud data={reportData[0]} />
-              {/* <SectionTopWords>
+        <>
+          <Wrapper ref={printRef}>
+            <ReportCover name={location.state.name} />
+            <HeaderTopContainer>
+              {COLORS.map((color, index) => (
+                <HeaderTopBorder key={index} bgColor={color} />
+              ))}
+            </HeaderTopContainer>
+            <Header>
+              <HeaderText>긍정 피드백</HeaderText>
+            </Header>
+            <SectionContainer>
+              <Section>
+                <SectionHeader>구성원들이 보는 나의 강점</SectionHeader>
+                <SectionSubTitle>TOP 3</SectionSubTitle>
+                <Wordcloud data={reportData[0]} />
+                {/* <SectionTopWords>
                 {strengthWords.slice(0, 3).map((word, index) => (
                   <TopWords key={index}>{word[0]}</TopWords>
                 ))}
               </SectionTopWords> */}
-              <SectionSubTitle>강점 단어 모음</SectionSubTitle>
-              <SectionAllWords>
-                {reportData[0].map((word, index) => (
-                  <AllWords key={index}>{`${word[0]} (${word[1]})`}</AllWords>
-                ))}
-              </SectionAllWords>
-            </Section>
-            <Section>
-              <SectionHeader>구성원들이 보는 나의 가치</SectionHeader>
-              <SectionSubTitle>TOP 3</SectionSubTitle>
-              <Wordcloud data={reportData[1]} />
-              {/* <SectionTopWords>
+                <SectionSubTitle>강점 단어 모음</SectionSubTitle>
+                <SectionAllWords>
+                  {reportData[0].map((word, index) => (
+                    <AllWords key={index}>{`${word[0]} (${word[1]})`}</AllWords>
+                  ))}
+                </SectionAllWords>
+              </Section>
+              <Section>
+                <SectionHeader>구성원들이 보는 나의 가치</SectionHeader>
+                <SectionSubTitle>TOP 3</SectionSubTitle>
+                <Wordcloud data={reportData[1]} />
+                {/* <SectionTopWords>
                 {valueWords.slice(0, 3).map((word, index) => (
                   <TopWords key={index}>{word[0]}</TopWords>
                 ))}
               </SectionTopWords> */}
-              <SectionSubTitle>가치 단어 모음</SectionSubTitle>
-              <SectionAllWords>
-                {reportData[1].map((word, index) => (
-                  <AllWords key={index}>{`${word[0]} (${word[1]})`}</AllWords>
-                ))}
-              </SectionAllWords>
-            </Section>
-          </SectionContainer>
-          <CommentContainer>
-            <CommentSection>
-              {/* <CommentSectionTitle>감사와<br />응원을<br />보냅니다</CommentSectionTitle> */}
-              <CommentSectionTitle>
-                <span>감사와</span>
-                <span>응원을</span>
-                <span>보냅니다</span>
-              </CommentSectionTitle>
-              <CommentSectionList>
-                {reportData[2].map((comment, index) => (
-                  <CommentSectionItem key={index}>
-                    - {comment}
-                  </CommentSectionItem>
-                ))}
-              </CommentSectionList>
-            </CommentSection>
-            <CommentSection>
-              <CommentSectionTitle>
-                <span>앞으로</span>
-                <span>기대합니다</span>
-              </CommentSectionTitle>
-              <CommentSectionList>
-                {reportData[3].map((comment, index) => (
-                  <CommentSectionItem key={index}>
-                    - {comment}
-                  </CommentSectionItem>
-                ))}
-              </CommentSectionList>
-            </CommentSection>
-          </CommentContainer>
-        </Wrapper>
+                <SectionSubTitle>가치 단어 모음</SectionSubTitle>
+                <SectionAllWords>
+                  {reportData[1].map((word, index) => (
+                    <AllWords key={index}>{`${word[0]} (${word[1]})`}</AllWords>
+                  ))}
+                </SectionAllWords>
+              </Section>
+            </SectionContainer>
+            <CommentContainer>
+              <CommentSection>
+                {/* <CommentSectionTitle>감사와<br />응원을<br />보냅니다</CommentSectionTitle> */}
+                <CommentSectionTitle>
+                  <span>감사와</span>
+                  <span>응원을</span>
+                  <span>보냅니다</span>
+                </CommentSectionTitle>
+                <CommentSectionList>
+                  {reportData[2].map((comment, index) => (
+                    <CommentSectionItem key={index}>
+                      - {comment}
+                    </CommentSectionItem>
+                  ))}
+                </CommentSectionList>
+              </CommentSection>
+              <CommentSection>
+                <CommentSectionTitle>
+                  <span>앞으로</span>
+                  <span>기대합니다</span>
+                </CommentSectionTitle>
+                <CommentSectionList>
+                  {reportData[3].map((comment, index) => (
+                    <CommentSectionItem key={index}>
+                      - {comment}
+                    </CommentSectionItem>
+                  ))}
+                </CommentSectionList>
+              </CommentSection>
+            </CommentContainer>
+          </Wrapper>
+          <DownloadButton onClick={handleDownloadPdf}>
+            <span>PDF</span>
+            <span>다운로드</span>
+          </DownloadButton>
+        </>
       )}
-      <DownloadButton onClick={handleDownloadPdf}>PDF</DownloadButton>
     </Container>
   );
 }

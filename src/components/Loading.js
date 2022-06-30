@@ -8,16 +8,18 @@ const Container = styled.div`
   align-items: center;
 `;
 
-function Loading({ message, marginTop }) {
+function Loading({ message, marginTop, animate = true }) {
   console.log(marginTop);
   return (
     <Container marginTop={marginTop}>
-      <ReactLoading
-        type={"bars"}
-        color={"black"}
-        height={"100px"}
-        width={"100px"}
-      />
+      {animate && (
+        <ReactLoading
+          type={"bars"}
+          color={"black"}
+          height={"100px"}
+          width={"100px"}
+        />
+      )}
       <span>{message}</span>
     </Container>
   );
