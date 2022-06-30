@@ -6,16 +6,19 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Report from "./pages/Report";
 import Sidebar from "./components/Sidebar";
+import { RecoilRoot } from "recoil";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Sidebar />
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/report" element={<Report />} />
-      </Routes>
+      <RecoilRoot>
+        <Sidebar />
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/report" element={<Report />} />
+        </Routes>
+      </RecoilRoot>
     </BrowserRouter>
   </React.StrictMode>
 );

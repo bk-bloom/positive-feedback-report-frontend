@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { findCollector, getCollectorsResponseInBulkByCollectorId } from "./api";
+import { searchResultAtom } from "./atom";
 
 const Container = styled.div`
   padding: 0 40px;
@@ -88,23 +90,26 @@ const ResultRow = styled.div`
 `;
 
 function App() {
-  const [name, setName] = useState("");
-  const [surveyName, setSurveyName] = useState("");
-  const [receivers, setReceivers] = useState({});
+  // const [name, setName] = useState("");
+  const [searchResult, setSearchResult] = useRecoilState(searchResultAtom);
 
+  // console.log("Search Atom => ", searchResult);
   const navigate = useNavigate();
-  const handleChange = (e) => {
-    setName(e.target.value);
-  };
+  // const handleChange = (e) => {
+  //   setName(e.target.value);
+  // };
 
   const handleSurveyNameChange = (e) => {
-    setSurveyName(e.target.value);
+    setSearchResult({
+      keyword: e.target.value,
+      result: {},
+    });
   };
-  const handleClick = () => {
-    navigate("/report", { state: { name } });
-  };
+  // const handleClick = () => {
+  //   navigate("/report", { state: { name } });
+  // };
   const handleSurveyNameClick = async () => {
-    const collector = await findCollector(surveyName);
+    const collector = await findCollector(searchResult.keyword);
     if (!collector) {
       console.log("검색 결과 없습니다.");
     }
@@ -114,13 +119,18 @@ function App() {
     );
 
     if (responses) {
-      setReceivers(responses);
+      setSearchResult({
+        keyword: searchResult.keyword,
+        result: responses,
+      });
     }
     // navigate("/report", { state: { name } });
   };
 
   const handleReceiverClick = (key) => {
-    navigate("/report", { state: { name: key, data: receivers[key] } });
+    navigate("/report", {
+      state: { name: key, data: searchResult.result[key] },
+    });
   };
   return (
     <Container>
@@ -140,14 +150,15 @@ function App() {
             type="text"
             placeholder="설문 이름을 입력하세요"
             onChange={handleSurveyNameChange}
+            value={searchResult.keyword}
           />
           <Button onClick={handleSurveyNameClick}>검색</Button>
         </InputContainer>
         <ResultContainer>
-          {Object.keys(receivers).length > 0 &&
-            Object.keys(receivers).map((name, index) => (
+          {Object.keys(searchResult.result).length > 0 &&
+            Object.keys(searchResult.result).map((name, index) => (
               <ResultRow key={index} onClick={() => handleReceiverClick(name)}>
-                {name} - ({receivers[name].responseCount})
+                {name} - ({searchResult.result[name].responseCount})
               </ResultRow>
             ))}
         </ResultContainer>
