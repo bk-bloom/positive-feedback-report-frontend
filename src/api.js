@@ -42,10 +42,6 @@ export const getCollectorsResponseInBulkByCollectorId = async (collectorId) => {
   for (let i = 0; i < responses.length; i++) {
     let name = responses[i].pages[0].questions[0].answers[0].text;
     const questions = responses[i].pages[0].questions;
-    const appreciateComments = [];
-    const expectComments = [];
-    let strength = {};
-    let values = {};
     for (let j = 0; j < questions.length; j++) {
       switch (questions[j].id) {
         case "78354997":
@@ -62,41 +58,86 @@ export const getCollectorsResponseInBulkByCollectorId = async (collectorId) => {
         case "78355000":
         case "78355004":
         case "78355005":
-          generateStrength(questions[j], strength);
+          // console.log(questions[j]);
+
+          for (let k = 0; k < questions[j].answers.length; k++) {
+            const text =
+              postivieQuestionChoices[questions[j].answers[k].choice_id].text;
+            if (!obj[name]["strength"]) {
+              obj[name]["strength"] = {};
+            }
+            if (!obj[name]["strength"][text]) {
+              obj[name]["strength"] = {
+                ...obj[name]["strength"],
+                [text]: 1,
+              };
+            } else {
+              obj[name]["strength"] = {
+                ...obj[name]["strength"],
+                [text]: obj[name]["strength"][text] + 1,
+              };
+            }
+          }
+          // generateStrength(questions[j], strength);
           break;
         case "78355006":
         case "78355007":
-          generateValue(questions[j], values);
+          for (let k = 0; k < questions[j].answers.length; k++) {
+            const text =
+              postivieQuestionChoices[questions[j].answers[k].choice_id].text;
+            if (!obj[name]["values"]) {
+              obj[name]["values"] = {};
+            }
+            if (!obj[name]["values"][text]) {
+              obj[name]["values"] = {
+                ...obj[name]["values"],
+                [text]: 1,
+              };
+            } else {
+              obj[name]["values"] = {
+                ...obj[name]["values"],
+                [text]: obj[name]["values"][text] + 1,
+              };
+            }
+          }
+          // generateValue(questions[j], values);
           break;
         case "78355003":
-          appreciateComments.push(questions[j].answers[0].text);
+          if (!obj[name]["appreciateComments"]) {
+            obj[name]["appreciateComments"] = [];
+          }
+          obj[name]["appreciateComments"].push(questions[j].answers[0].text);
+          // appreciateComments.push(questions[j].answers[0].text);
           break;
         case "78355002":
-          expectComments.push(questions[j].answers[0].text);
+          if (!obj[name]["expectComments"]) {
+            obj[name]["expectComments"] = [];
+          }
+          obj[name]["expectComments"].push(questions[j].answers[0].text);
+          // expectComments.push(questions[j].answers[0].text);
           break;
         default:
           console.log("???");
           break;
       }
     }
-    let strengthWords = [];
-    for (const key in strength) {
-      strengthWords.push([key, strength[key]]);
-    }
-
-    strengthWords.sort((a, b) => b[1] - a[1]);
-
-    let valueWords = [];
-    for (const key in values) {
-      valueWords.push([key, values[key]]);
-    }
-    valueWords.sort((a, b) => b[1] - a[1]);
-
-    obj[name].strengthWords = strengthWords;
-    obj[name].valuesWords = valueWords;
-    obj[name].appreciateComments = appreciateComments;
-    obj[name].expectComments = expectComments;
   }
+
+  for (const name in obj) {
+    const s = [];
+    for (const word in obj[name].strength) {
+      s.push([word, obj[name].strength[word]]);
+    }
+    s.sort((a, b) => b[1] - a[1]);
+    const v = [];
+    for (const word in obj[name].values) {
+      v.push([word, obj[name].values[word]]);
+    }
+    v.sort((a, b) => b[1] - a[1]);
+    obj[name].strengthWords = s;
+    obj[name].valuesWords = v;
+  }
+
   if (Object.keys(obj).length > 0) {
     return obj;
   }

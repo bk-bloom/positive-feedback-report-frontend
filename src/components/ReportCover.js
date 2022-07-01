@@ -41,6 +41,7 @@ const TitleContainer = styled.div`
 `;
 
 const ColumnLeft = styled.div`
+  flex: 5;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -64,12 +65,13 @@ const Phrase = styled.p`
   margin: 0;
 `;
 const ColumnRight = styled(ColumnLeft)`
+  flex: 1;
   justify-content: center;
   align-items: center;
 `;
 
 const Name = styled.span`
-  font-size: 30px;
+  font-size: 24px;
   font-weight: bold;
 `;
 

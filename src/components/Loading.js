@@ -9,7 +9,6 @@ const Container = styled.div`
 `;
 
 function Loading({ message, marginTop, animate = true }) {
-  console.log(marginTop);
   return (
     <Container marginTop={marginTop}>
       {animate && (
