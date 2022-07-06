@@ -13,10 +13,10 @@ const COLORS = [
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 1150px;
+  width: 21cm;
+  height: 29.7cm;
   background-color: #ff812c;
   color: white;
-  margin-bottom: 100px;
 `;
 const Wrapper = styled.div`
   display: flex;
@@ -62,6 +62,7 @@ const Title = styled.h1`
 
 const Phrase = styled.p`
   font-weight: bold;
+  font-size: 14px;
   margin: 0;
 `;
 const ColumnRight = styled(ColumnLeft)`

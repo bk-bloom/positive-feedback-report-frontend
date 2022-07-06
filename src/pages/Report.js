@@ -29,14 +29,17 @@ const Container = styled.div`
   margin-left: 280px;
 `;
 const Wrapper = styled.div`
-  width: 60%;
+  // width: 60%;
   display: flex;
+  width: 21cm;
   flex-direction: column;
-  padding: 40px;
+  // padding: 40px;
+  // border: 1px solid black;
 `;
 
 const HeaderTopContainer = styled.div`
   display: flex;
+  // margin-top: 20px;
 `;
 const HeaderTopBorder = styled.div`
   height: 10px;
@@ -191,7 +194,7 @@ function Report() {
     setIsLoading(true);
     const element = printRef.current;
     const canvas = await html2canvas(element, {
-      scale: 2,
+      scale: 3,
     });
 
     const data = canvas.toDataURL("image/png");
@@ -201,7 +204,7 @@ function Report() {
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
 
-    const pageHeight = 295;
+    const pageHeight = 297;
     let heightLeft = pdfHeight;
 
     let position = 0;
@@ -260,11 +263,6 @@ function Report() {
                 <SectionHeader>구성원들이 보는 나의 강점</SectionHeader>
                 <SectionSubTitle>TOP 3</SectionSubTitle>
                 <Wordcloud data={reportData[0]} />
-                {/* <SectionTopWords>
-                {strengthWords.slice(0, 3).map((word, index) => (
-                  <TopWords key={index}>{word[0]}</TopWords>
-                ))}
-              </SectionTopWords> */}
                 <SectionSubTitle>강점 단어 모음</SectionSubTitle>
                 <SectionAllWords>
                   {reportData[0].map((word, index) => (
@@ -276,11 +274,6 @@ function Report() {
                 <SectionHeader>구성원들이 보는 나의 가치</SectionHeader>
                 <SectionSubTitle>TOP 3</SectionSubTitle>
                 <Wordcloud data={reportData[1]} />
-                {/* <SectionTopWords>
-                {valueWords.slice(0, 3).map((word, index) => (
-                  <TopWords key={index}>{word[0]}</TopWords>
-                ))}
-              </SectionTopWords> */}
                 <SectionSubTitle>가치 단어 모음</SectionSubTitle>
                 <SectionAllWords>
                   {reportData[1].map((word, index) => (
@@ -291,7 +284,6 @@ function Report() {
             </SectionContainer>
             <CommentContainer>
               <CommentSection>
-                {/* <CommentSectionTitle>감사와<br />응원을<br />보냅니다</CommentSectionTitle> */}
                 <CommentSectionTitle>
                   <span>감사와</span>
                   <span>응원을</span>
