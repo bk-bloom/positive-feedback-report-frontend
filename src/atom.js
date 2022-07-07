@@ -8,3 +8,10 @@ export const searchResultAtom = atom({
     result: {},
   },
 });
+
+export const checkupResultAtom = atom({
+  key: "checkupResult",
+  default: {
+    result: {},
+  },
+});

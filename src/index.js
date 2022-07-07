@@ -9,6 +9,8 @@ import Sidebar from "./components/Sidebar";
 import { RecoilRoot } from "recoil";
 import Checkup from "./pages/Checkup";
 import PositiveFeedback from "./pages/PositiveFeedback";
+import CheckupDetail from "./pages/CheckupDetail";
+import CheckupReport from "./pages/CheckupReport";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -21,6 +23,8 @@ root.render(
           <Route path="/positive" element={<PositiveFeedback />} />
           <Route path="/positive/report" element={<Report />} />
           <Route path="/checkup" element={<Checkup />} />
+          <Route path="/checkup/:id" element={<CheckupDetail />} />
+          <Route path="/checkup/:id/report" element={<CheckupReport />} />
         </Routes>
       </RecoilRoot>
     </BrowserRouter>

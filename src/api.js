@@ -167,3 +167,71 @@ function generateValue(question, VALUES) {
     }
   }
 }
+
+export const getCollectorsBySurveyId = async (surveyId) => {
+  const response = await axios.get(
+    `https://api.surveymonkey.com/v3/surveys/${surveyId}/collectors`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.REACT_APP_SURVEY_MONKEY_ACCESS_TOKEN}`,
+      },
+    }
+  );
+
+  return response.data.data;
+};
+
+export const getCollectorRecipientsByCollectorId = async (collectorId) => {
+  const response = await axios.get(
+    `https://api.surveymonkey.com/v3/collectors/${collectorId}/recipients`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.REACT_APP_SURVEY_MONKEY_ACCESS_TOKEN}`,
+      },
+    }
+  );
+
+  return response.data.data;
+};
+
+export const getRecipients = async (id) => {
+  const data = await getCollectorRecipientsByCollectorId(id);
+  const dest = {};
+
+  for (let i = 0; i < data.length; i++) {
+    if (!dest[data[i].email]) {
+      dest[data[i].email] = {};
+    }
+    dest[data[i].email][data[i].id] = [];
+  }
+
+  return dest;
+  // return recipients;
+};
+
+export const getMaumCheckupResponses = async (collectorId) => {
+  const response = await axios.get(
+    `https://api.surveymonkey.com/v3/collectors/${collectorId}/responses/bulk`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.REACT_APP_SURVEY_MONKEY_ACCESS_TOKEN}`,
+      },
+    }
+  );
+  //   console.log(response.data.data[0].pages[0].questions);
+  const responses = response.data.data;
+  console.log(responses);
+  const dest = [];
+  for (let i = 0; i < responses.length; i++) {
+    const obj = {};
+    const recipientId = responses[i].recipient_id;
+    obj[recipientId] = [];
+    const questions = responses[i].pages[0].questions;
+    for (let i = 0; i < questions.length; i++) {
+      obj[recipientId].push(questions[i].answers[0].text);
+      // console.log(questions[i].answers);
+    }
+    dest.push(obj);
+  }
+  return dest;
+};
