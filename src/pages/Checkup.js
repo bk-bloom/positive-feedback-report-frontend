@@ -40,44 +40,44 @@ function Checkup() {
 
   useEffect(() => {
     async function fetchData() {
-      // const data = await getCollectorsBySurveyId("400662208");
-      const data = [
-        {
-          name: "도레이첨단소재",
-          id: "421610759",
-          href: "https://api.surveymonkey.com/v3/collectors/421610759",
-          type: "email",
-          email: "ask@bloomhappiness.com",
-        },
-        {
-          name: "마음 체크업(블룸)",
-          id: "421447636",
-          href: "https://api.surveymonkey.com/v3/collectors/421447636",
-          type: "email",
-          email: "ask@bloomhappiness.com",
-        },
-        {
-          name: "마음 체크업(삼성)",
-          id: "421431928",
-          href: "https://api.surveymonkey.com/v3/collectors/421431928",
-          type: "email",
-          email: "ask@bloomhappiness.com",
-        },
-        {
-          name: "마음 체크업(두산)",
-          id: "421346228",
-          href: "https://api.surveymonkey.com/v3/collectors/421346228",
-          type: "email",
-          email: "ask@bloomhappiness.com",
-        },
-        {
-          name: "마음 체크업(현대)",
-          id: "421431558",
-          href: "https://api.surveymonkey.com/v3/collectors/421431558",
-          type: "email",
-          email: "ask@bloomhappiness.com",
-        },
-      ];
+      const data = await getCollectorsBySurveyId("400662208");
+      // const data = [
+      //   {
+      //     name: "도레이첨단소재",
+      //     id: "421610759",
+      //     href: "https://api.surveymonkey.com/v3/collectors/421610759",
+      //     type: "email",
+      //     email: "ask@bloomhappiness.com",
+      //   },
+      //   {
+      //     name: "마음 체크업(블룸)",
+      //     id: "421447636",
+      //     href: "https://api.surveymonkey.com/v3/collectors/421447636",
+      //     type: "email",
+      //     email: "ask@bloomhappiness.com",
+      //   },
+      //   {
+      //     name: "마음 체크업(삼성)",
+      //     id: "421431928",
+      //     href: "https://api.surveymonkey.com/v3/collectors/421431928",
+      //     type: "email",
+      //     email: "ask@bloomhappiness.com",
+      //   },
+      //   {
+      //     name: "마음 체크업(두산)",
+      //     id: "421346228",
+      //     href: "https://api.surveymonkey.com/v3/collectors/421346228",
+      //     type: "email",
+      //     email: "ask@bloomhappiness.com",
+      //   },
+      //   {
+      //     name: "마음 체크업(현대)",
+      //     id: "421431558",
+      //     href: "https://api.surveymonkey.com/v3/collectors/421431558",
+      //     type: "email",
+      //     email: "ask@bloomhappiness.com",
+      //   },
+      // ];
       // console.log(data);
       setItems(data);
     }

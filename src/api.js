@@ -235,3 +235,35 @@ export const getMaumCheckupResponses = async (collectorId) => {
   }
   return dest;
 };
+
+export const getMaumCheckupNameWithResponses = async (collectorId) => {
+  const response = await axios.get(
+    `https://api.surveymonkey.com/v3/collectors/${collectorId}/responses/bulk`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.REACT_APP_SURVEY_MONKEY_ACCESS_TOKEN}`,
+      },
+    }
+  );
+  //   console.log(response.data.data[0].pages[0].questions);
+  const responses = response.data.data;
+  console.log(responses);
+  const dest = {};
+  for (let i = 0; i < responses.length; i++) {
+    const questions = responses[i].pages[0].questions;
+    const name = responses[i].pages[0].questions[0].answers[0].text;
+    const answers = [];
+
+    for (let j = 0; j < questions.length; j++) {
+      answers.push(questions[j].answers[0].text);
+    }
+    if (dest[name] === undefined) {
+      dest[name] = [];
+    }
+
+    dest[name].push(answers);
+  }
+
+  console.log(dest);
+  return dest;
+};

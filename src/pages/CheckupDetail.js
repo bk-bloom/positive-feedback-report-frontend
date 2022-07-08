@@ -4,6 +4,7 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import {
   getCollectorRecipientsByCollectorId,
+  getMaumCheckupNameWithResponses,
   getMaumCheckupResponses,
   getRecipients,
 } from "../api";
@@ -28,14 +29,33 @@ const Item = styled.div`
   width: 100%;
   height: 60px;
   border: 1px solid black;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+`;
+
+const Column = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Button = styled.button`
+  padding: 10px;
+  width: 100px;
   cursor: pointer;
+  border: none;
+  background-color: #ff812c;
+  color: white;
+  font-weight: bold;
 `;
 
 function CheckupDetail() {
   const { id } = useParams();
   const { state } = useLocation();
   const navigate = useNavigate();
-  const [result, setResult] = useRecoilState(checkupResultAtom);
+  const [checkupResponse, setCheckupResponse] =
+    useRecoilState(checkupResultAtom);
 
   const [recipients, setRecipients] = useState({});
   const countRef = useRef(0);
@@ -44,42 +64,43 @@ function CheckupDetail() {
     async function fetchData() {
       //   const response = await getRecipients(id);
 
-      const response = {
-        "bk.kang@bloomhappiness.com": {
-          7131683027: [],
-          7131683029: [],
-          7131683031: [],
-          7131683033: [],
-        },
-        "g.kangksw@gmail.com": {
-          7131683028: [],
-          7131683030: [],
-          7131683032: [],
-          7131683034: [],
-        },
-      };
-
-      const data = await getMaumCheckupResponses(id);
-      for (let i = 0; i < data.length; i++) {
-        const recipientId = Object.keys(data[i])[0];
-        for (const email in response) {
-          if (response[email][recipientId].length === 0) {
-            response[email][recipientId].push(...data[i][recipientId]);
-            break;
-          }
-        }
-      }
-      console.log(response);
-      setResult({
-        ...result,
-        result: response,
+      //   const response = {
+      //     "bk.kang@bloomhappiness.com": {
+      //       7131683027: [],
+      //       7131683029: [],
+      //       7131683031: [],
+      //       7131683033: [],
+      //     },
+      //     "g.kangksw@gmail.com": {
+      //       7131683028: [],
+      //       7131683030: [],
+      //       7131683032: [],
+      //       7131683034: [],
+      //     },
+      //   };
+      const data = await getMaumCheckupNameWithResponses(id);
+      //   const data = await getMaumCheckupResponses(id);
+      //   for (let i = 0; i < data.length; i++) {
+      //     const recipientId = Object.keys(data[i])[0];
+      //     for (const email in response) {
+      //       if (response[email][recipientId].length === 0) {
+      //         response[email][recipientId].push(...data[i][recipientId]);
+      //         break;
+      //       }
+      //     }
+      //   }
+      console.log(data);
+      //   console.log(response);
+      setCheckupResponse({
+        ...checkupResponse,
+        result: data,
       });
-      setRecipients(response);
+      setRecipients(data);
       //   console.log("fetch end");
     }
     if (countRef.current === 0) {
-      console.log(Object.keys(result.result).length);
-      if (!Object.keys(result.result).length > 0) {
+      console.log(Object.keys(checkupResponse.result).length);
+      if (!Object.keys(checkupResponse.result).length > 0) {
         fetchData();
       }
       //   console.log("useEffect in development!");
@@ -92,23 +113,35 @@ function CheckupDetail() {
     // console.log("useEffect End");
   }, []);
 
-  const handleClick = (email) => {
+  const handleClick = (name, day) => {
+    // console.log(checkupResponse.result[name][day]);
     navigate("report", {
       state: {
-        email,
-        result: result.result[email],
+        name,
+        day: day + 1,
+        result: checkupResponse.result[name][day],
       },
     });
   };
-  console.log(result);
   return (
     <Container>
       <Title>{state.name}</Title>
       <List>
-        {Object.keys(result.result).length > 0 &&
-          Object.keys(result.result).map((email, index) => (
-            <Item key={index} onClick={() => handleClick(email)}>
-              {email}
+        {Object.keys(checkupResponse.result).length > 0 &&
+          Object.keys(checkupResponse.result).map((name, index) => (
+            <Item key={index}>
+              <Column>
+                <span>
+                  {name} ({checkupResponse.result[name].length})
+                </span>
+              </Column>
+              {[0, 1, 2, 3, 4].map((day) => (
+                <Column key={day}>
+                  <Button onClick={() => handleClick(name, day)}>
+                    {day < 4 ? `${day + 1}주차 리포트` : "월간 리포트"}
+                  </Button>
+                </Column>
+              ))}
             </Item>
           ))}
       </List>
