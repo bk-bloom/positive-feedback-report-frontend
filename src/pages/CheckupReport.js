@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
+import { Chart } from "../components/Chart";
 
 const Container = styled.div`
   margin-left: 280px;
@@ -36,6 +38,16 @@ function CheckupReport() {
   const {
     state: { email, result },
   } = useLocation();
+
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    const obj = {
+      prev: [],
+      current: [],
+    };
+    setData();
+  }, []);
   return (
     <Container>
       <Title>마음체크업 리포트입니다.</Title>
@@ -48,6 +60,7 @@ function CheckupReport() {
           </Item>
         ))}
       </List>
+      {/* <Chart /> */}
     </Container>
   );
 }
