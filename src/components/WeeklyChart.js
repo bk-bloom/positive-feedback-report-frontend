@@ -153,34 +153,31 @@ export function WeeklyChart({ result, week }) {
     ],
   });
   useEffect(() => {
-    if (countRef.current === 0) {
-      if (week === 0) {
-        const obj = {
-          ...data,
-          datasets: [data.datasets[0]],
-        };
-        obj.datasets[0].data = result[0].slice(1, 7);
-        setData(obj);
-      } else if (week === 4) {
-        const obj = {
-          ...data,
-        };
+    if (week === 0) {
+      const obj = {
+        ...data,
+        datasets: [data.datasets[0]],
+      };
+      obj.datasets[0].data = result[0].slice(1, 7);
+      setData(obj);
+    } else if (week === 4) {
+      const obj = {
+        ...data,
+      };
 
-        obj.datasets[0].data = result[week - 1].slice(1, 7);
-        obj.datasets[1].data = result[week - 2].slice(1, 7);
+      obj.datasets[0].data = result[week - 1].slice(1, 7);
+      obj.datasets[1].data = result[week - 2].slice(1, 7);
 
-        setData(obj);
-      } else {
-        const obj = {
-          ...data,
-        };
+      setData(obj);
+    } else {
+      const obj = {
+        ...data,
+      };
 
-        obj.datasets[0].data = result[week].slice(1, 7);
-        obj.datasets[1].data = result[week - 1].slice(1, 7);
+      obj.datasets[0].data = result[week].slice(1, 7);
+      obj.datasets[1].data = result[week - 1].slice(1, 7);
 
-        setData(obj);
-      }
-      countRef.current += 1;
+      setData(obj);
     }
     // setData();
   }, []);
