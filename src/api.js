@@ -247,7 +247,7 @@ export const getMaumCheckupNameWithResponses = async (collectorId) => {
   );
   //   console.log(response.data.data[0].pages[0].questions);
   const responses = response.data.data;
-  console.log(responses);
+  // console.log(responses);
   const dest = {};
   for (let i = 0; i < responses.length; i++) {
     const questions = responses[i].pages[0].questions;
@@ -264,6 +264,6 @@ export const getMaumCheckupNameWithResponses = async (collectorId) => {
     dest[name].push(answers);
   }
 
-  console.log(dest);
+  // console.log(dest);
   return dest;
 };

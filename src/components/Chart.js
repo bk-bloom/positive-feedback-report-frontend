@@ -11,6 +11,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import { useEffect, useRef, useState } from "react";
 
 ChartJS.register(
   CategoryScale,
@@ -36,8 +37,8 @@ ChartJS.register(
 const Container = styled.div`
   //   height: 200px;
   // width: 500px;
-  width: 600px;
-  padding: 40px;
+  width: 350px;
+  // padding: 10px;
   // border: 1px solid black;
 `;
 
@@ -45,7 +46,7 @@ export const options = {
   // responsive: true,
   maintainAspectRatio: false,
   layout: {
-    padding: 20,
+    // padding: 20,
   },
   plugins: {
     legend: {
@@ -53,7 +54,7 @@ export const options = {
         padding: 10,
         boxHeight: 2,
       },
-      // display: false,
+      display: false,
       position: "bottom",
     },
     title: {
@@ -107,37 +108,40 @@ export const options = {
   },
 };
 
-const labels = ["긍정정서", "몰입", "관계", "의미", "성취", "활력"];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "지난 주",
-      data: [10, 10, 8, 8, 9, 10],
-      borderDash: [5, 5],
-      borderColor: "rgb(255, 99, 132)",
-      backgroundColor: "rgb(255, 99, 132)",
-      borderWidth: 2,
-      datalabels: {
-        align: "start",
-        anchor: "start",
+export function Chart({ result, color }) {
+  const countRef = useRef(0);
+  // console.log(result);
+  const [data, setData] = useState({
+    labels: ["1주", "2주", "3주", "4주"],
+    datasets: [
+      {
+        data: result,
+        borderColor: color,
+        backgroundColor: color,
+        borderWidth: 2,
       },
-    },
-    {
-      label: "이번 주",
-      data: [10, 10, 1, 10, 10, 10],
-      borderColor: "rgb(53, 162, 235)",
-      backgroundColor: "rgb(53, 162, 235)",
-      borderWidth: 2,
-    },
-  ],
-};
-
-export function Chart() {
+    ],
+  });
+  // useEffect(() => {
+  //   if (countRef.current === 0) {
+  //     if (result.length === 1) {
+  //       const obj = {
+  //         ...data,
+  //         datasets: [data.datasets[1]],
+  //       };
+  //       console.log(obj);
+  //       console.log(result[0].slice(1, 7));
+  //       obj.datasets[0].data = result[0].slice(1, 7);
+  //       console.log(obj);
+  //       setData(obj);
+  //     }
+  //     countRef.current += 1;
+  //   }
+  //   // setData();
+  // }, []);
   return (
     <Container>
-      <Line options={options} data={data} height={400} />
+      <Line options={options} data={data} height={250} />
     </Container>
   );
 }
