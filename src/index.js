@@ -11,6 +11,7 @@ import Checkup from "./pages/Checkup";
 import PositiveFeedback from "./pages/PositiveFeedback";
 import CheckupDetail from "./pages/CheckupDetail";
 import CheckupReport from "./pages/CheckupReport";
+import CheckupCollectors from "./pages/CheckupCollectors";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -23,8 +24,15 @@ root.render(
           <Route path="/positive" element={<PositiveFeedback />} />
           <Route path="/positive/report" element={<Report />} />
           <Route path="/checkup" element={<Checkup />} />
-          <Route path="/checkup/:id" element={<CheckupDetail />} />
-          <Route path="/checkup/:id/report" element={<CheckupReport />} />
+          <Route path="/checkup/:projectId" element={<CheckupCollectors />} />
+          <Route
+            path="/checkup/:projectId/:collectorId"
+            element={<CheckupDetail />}
+          />
+          <Route
+            path="/checkup/:projectId/:collectorId/report"
+            element={<CheckupReport />}
+          />
         </Routes>
       </RecoilRoot>
     </BrowserRouter>

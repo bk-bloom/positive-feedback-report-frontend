@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { getCollectorsBySurveyId } from "../api";
+import { getCollectorsBySurveyId, getProjectsBySurveyId } from "../api";
+import { checkupProjectListAtom } from "../atom";
 import HeadSection from "../components/HeadSection";
 
 const Container = styled.div`
@@ -32,35 +34,60 @@ const Item = styled.div`
   height: 60px;
   border: 1px solid black;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+`;
+
+const Column = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Button = styled.button`
+  padding: 10px;
+  width: 100px;
+  cursor: pointer;
+  border: none;
+  background-color: #ff812c;
+  color: white;
+  font-weight: bold;
 `;
 
 function Checkup() {
-  const [items, setItems] = useState([]);
+  const [projectList, setProjectList] = useRecoilState(checkupProjectListAtom);
+  // const [projects, setProjects] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log(projectList);
     async function fetchData() {
-      const data = await getCollectorsBySurveyId("400662208");
-      setItems(data);
+      const data = await getProjectsBySurveyId("400662208");
+      console.log("Checkup =>", data);
+      // setProjects(data);
+      setProjectList({ result: data });
     }
-    fetchData();
+
+    if (projectList.result.length === 0) {
+      fetchData();
+    }
   }, []);
 
-  const handleClick = (id, name) => {
-    navigate(id, { state: { name } });
+  const handleClick = (projectId, collectors) => {
+    navigate(projectId, { state: { collectors } });
   };
   return (
     <Container>
       <Wrapper>
         <HeadSection title="마음 체크업 리포트 (준비중)" />
         <List>
-          {items.length > 0 &&
-            items.map((item) => (
+          {projectList.result.length > 0 &&
+            projectList.result.map((project) => (
               <Item
-                key={item.id}
-                onClick={() => handleClick(item.id, item.name)}
+                key={project.id}
+                onClick={() => handleClick(project.id, project.collectors)}
               >
-                {item.name}
+                {project.id}
               </Item>
             ))}
         </List>

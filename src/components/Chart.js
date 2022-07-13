@@ -110,7 +110,6 @@ export const options = {
 
 export function Chart({ result, color }) {
   const countRef = useRef(0);
-  // console.log(result);
   const [data, setData] = useState({
     labels: ["1주", "2주", "3주", "4주"],
     datasets: [

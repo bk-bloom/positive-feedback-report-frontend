@@ -177,8 +177,35 @@ export const getCollectorsBySurveyId = async (surveyId) => {
       },
     }
   );
+  console.log(response.data);
 
   return response.data.data;
+};
+
+export const getProjectsBySurveyId = async (surveyId) => {
+  const collectors = await getCollectorsBySurveyId(surveyId);
+
+  // TODO: get project ids from DB
+  const projectIds = ["22146"];
+  const dest = [];
+
+  for (let i = 0; i < projectIds.length; i++) {
+    const obj = {
+      id: projectIds[i],
+      collectors: [],
+    };
+    for (let j = 0; j < collectors.length; j++) {
+      if (collectors[j].name.includes(projectIds[i])) {
+        obj.collectors.push(collectors[j]);
+      }
+    }
+    dest.push(obj);
+  }
+  for (let i = 0; i < dest.length; i++) {
+    dest[i].collectors.sort((a, b) => Number(a.id) - Number(b.id));
+  }
+
+  return dest;
 };
 
 export const getCollectorRecipientsByCollectorId = async (collectorId) => {
@@ -247,21 +274,20 @@ export const getMaumCheckupNameWithResponses = async (collectorId) => {
   );
   //   console.log(response.data.data[0].pages[0].questions);
   const responses = response.data.data;
-  // console.log(responses);
   const dest = {};
   for (let i = 0; i < responses.length; i++) {
     const questions = responses[i].pages[0].questions;
-    const name = responses[i].pages[0].questions[0].answers[0].text;
+    const email = responses[i].pages[0].questions[1].answers[0].text;
     const answers = [];
 
     for (let j = 0; j < questions.length; j++) {
       answers.push(questions[j].answers[0].text);
     }
-    if (dest[name] === undefined) {
-      dest[name] = [];
+    if (dest[email] === undefined) {
+      dest[email] = [];
     }
 
-    dest[name].push(answers);
+    dest[email] = answers;
   }
 
   // console.log(dest);
