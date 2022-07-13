@@ -165,8 +165,8 @@ export function WeeklyChart({ result, week }) {
         ...data,
       };
 
-      obj.datasets[0].data = result[1].slice(2, 8);
-      obj.datasets[1].data = result[0].slice(2, 8);
+      obj.datasets[0].data = result[week].slice(2, 8);
+      obj.datasets[1].data = result[week - 1].slice(2, 8);
 
       setData(obj);
     } else {
@@ -174,8 +174,8 @@ export function WeeklyChart({ result, week }) {
         ...data,
       };
 
-      obj.datasets[0].data = result[1].slice(2, 8);
-      obj.datasets[1].data = result[0].slice(2, 8);
+      obj.datasets[0].data = result[week].slice(2, 8);
+      obj.datasets[1].data = result[week - 1].slice(2, 8);
 
       setData(obj);
     }

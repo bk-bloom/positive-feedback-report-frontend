@@ -124,10 +124,11 @@ function CheckupReport() {
   };
   const extractColumn = (index) => {
     const dest = [];
-    let target = week === 0 ? 0 : 1;
+    let target = week === 4 ? 3 : week;
     for (let i = 0; i <= target; i++) {
       dest.push(result[i][index]);
     }
+    console.log(dest);
     return dest;
   };
 
@@ -237,7 +238,7 @@ function CheckupReport() {
         </ChartContainer>
 
         <h4>✏️ 지난 주에 남긴 기록</h4>
-        <P>- {result[week === 0 ? 0 : 1][8]}</P>
+        <P>- {result[week === 4 ? 3 : week][8]}</P>
 
         <h4>📌 마음 리포트에서 살펴보는 마음 건강 영역</h4>
         <P>

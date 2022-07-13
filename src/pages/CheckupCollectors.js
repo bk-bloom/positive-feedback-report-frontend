@@ -108,10 +108,7 @@ function CheckupCollectors() {
     navigate(id, {
       state: {
         week: index,
-        result:
-          index === 0
-            ? checkupCollectorResponses.result.slice(0, 1)
-            : checkupCollectorResponses.result.slice(index - 1, index + 1),
+        result: checkupCollectorResponses.result,
       },
     });
   };
@@ -148,7 +145,12 @@ function CheckupCollectors() {
           ? "데이터가 없습니다"
           : collectors.map((collector, index) => (
               <Item key={collector.id}>
-                <Column>{index + 1}주차 리포트</Column>
+                <Column>
+                  {index + 1}주차 리포트 (
+                  {checkupCollectorResponses.result.length !== 0 &&
+                    Object.keys(checkupCollectorResponses.result[index]).length}
+                  )
+                </Column>
                 <Column>
                   <Button onClick={() => handleClick(collector.id, index)}>
                     상세보기
