@@ -187,11 +187,17 @@ export const getProjectsBySurveyId = async (surveyId) => {
 
   // TODO: get project ids from DB
   const projectIds = ["22146"];
+  const projectTitles = ["도레이첨단소재"];
+  const projectDuration = ["8/19 - 9/13"];
+  const projectStatus = ["예정"];
   const dest = [];
 
   for (let i = 0; i < projectIds.length; i++) {
     const obj = {
       id: projectIds[i],
+      title: projectTitles[i],
+      duration: projectDuration[i],
+      status: projectStatus[i],
       collectors: [],
     };
     for (let j = 0; j < collectors.length; j++) {
@@ -263,33 +269,45 @@ export const getMaumCheckupResponses = async (collectorId) => {
   return dest;
 };
 
-export const getMaumCheckupNameWithResponses = async (collectorId) => {
-  const response = await axios.get(
-    `https://api.surveymonkey.com/v3/collectors/${collectorId}/responses/bulk`,
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.REACT_APP_SURVEY_MONKEY_ACCESS_TOKEN}`,
-      },
-    }
+export const getMaumCheckupNameWithResponses = async (collectorIds) => {
+  const endpoints = collectorIds.map(
+    (collectorId) =>
+      `https://api.surveymonkey.com/v3/collectors/${collectorId}/responses/bulk`
   );
-  //   console.log(response.data.data[0].pages[0].questions);
-  const responses = response.data.data;
-  const dest = {};
-  for (let i = 0; i < responses.length; i++) {
-    const questions = responses[i].pages[0].questions;
-    const email = responses[i].pages[0].questions[1].answers[0].text;
-    const answers = [];
+  const allResponses = await axios
+    .all(
+      endpoints.map((endpoint) =>
+        axios.get(endpoint, {
+          headers: {
+            Authorization: `Bearer ${process.env.REACT_APP_SURVEY_MONKEY_ACCESS_TOKEN}`,
+          },
+        })
+      )
+    )
+    .then((res) => {
+      const data = [];
 
-    for (let j = 0; j < questions.length; j++) {
-      answers.push(questions[j].answers[0].text);
-    }
-    if (dest[email] === undefined) {
-      dest[email] = [];
-    }
+      for (let i = 0; i < res.length; i++) {
+        const responses = res[i].data.data;
+        const dest = {};
+        for (let j = 0; j < responses.length; j++) {
+          const questions = responses[j].pages[0].questions;
+          const email = responses[j].pages[0].questions[1].answers[0].text;
+          const answers = [];
+          for (let k = 0; k < questions.length; k++) {
+            answers.push(questions[k].answers[0].text);
+          }
+          console.log(answers);
+          if (dest[email] === undefined) {
+            dest[email] = [];
+          }
+          dest[email] = answers;
+        }
+        data.push(dest);
+      }
+      console.log(data);
+      return data;
+    });
 
-    dest[email] = answers;
-  }
-
-  // console.log(dest);
-  return dest;
+  return allResponses;
 };

@@ -128,7 +128,7 @@ function CheckupReport() {
     for (let i = 0; i <= target; i++) {
       dest.push(result[i][index]);
     }
-    console.log(dest);
+    // console.log(dest);
     return dest;
   };
 
