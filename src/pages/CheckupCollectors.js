@@ -119,20 +119,31 @@ function CheckupCollectors() {
       collectorId,
       checkupCollectorResponses.result[index]
     );
-    console.log("Save to DB");
     const response = await axios.post(
-      "http://localhost:8080/checkup",
+      "http://localhost:8080/checkup/email",
       JSON.stringify({
-        projectId,
-        collectorId,
         week: index + 1,
-        data: checkupCollectorResponses.result[index],
+        data: Object.keys(checkupCollectorResponses.result[index]),
       }),
       {
         headers: { "Content-Type": "Application/json" },
       }
     );
-    console.log(response.data);
+    console.log(response);
+    // console.log("Save to DB");
+    // const response = await axios.post(
+    //   "http://localhost:8080/checkup",
+    //   JSON.stringify({
+    //     projectId,
+    //     collectorId,
+    //     week: index + 1,
+    //     data: checkupCollectorResponses.result[index],
+    //   }),
+    // {
+    //   headers: { "Content-Type": "Application/json" },
+    // }
+    // );
+    // console.log(response.data);
 
     console.log("Send Report");
   };
