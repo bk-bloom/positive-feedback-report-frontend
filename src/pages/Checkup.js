@@ -27,15 +27,25 @@ const List = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-top: 5rem;
 `;
 
 const Item = styled.div`
-  width: 100%;
-  height: 60px;
-  border: 1px solid black;
+  width: 150px;
+  height: 150px;
   cursor: pointer;
   display: flex;
-  align-items: center;
+  padding: 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  box-shadow: 0px 0px 6px -1px rgba(0, 0, 0, 0.3);
+  &:hover {
+    background-color: rgba(255, 129, 44, 0.8);
+    color: white;
+
+    // box-shadow: 0px 0px 6px -1px #ff812c;
+  }
+  transition: all 0.2s;
 `;
 
 const Column = styled.div`

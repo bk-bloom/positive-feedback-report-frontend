@@ -22,33 +22,44 @@ const Title = styled.h1``;
 
 const List = styled.div`
   display: flex;
-  flex-direction: column;
   width: 100%;
 `;
 
 const Item = styled.div`
-  width: 100%;
-  height: 60px;
-  border: 1px solid black;
+  width: 150px;
+  height: 150px;
+  margin: 10px;
   display: flex;
-  align-items: center;
   padding: 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  box-shadow: 0px 0px 6px -1px rgba(0, 0, 0, 0.3);
 `;
 
 const Column = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  width: 100%;
 `;
 
 const Button = styled.button`
   padding: 10px;
-  width: 120px;
+  width: 100%;
   cursor: pointer;
   border: none;
   background-color: #ff812c;
   color: white;
   font-weight: bold;
+  margin-top: 5px;
+  &:hover {
+    // color: #ff812c;
+    // background-color: rgba(255, 129, 44, 0.4);
+    // color: white;
+
+    // box-shadow: 0px 0px 6px -1px #ff812c;
+  }
+  // transition: all 0.2s;
 `;
 
 function CheckupCollectors() {
@@ -166,8 +177,6 @@ function CheckupCollectors() {
                   <Button onClick={() => handleClick(collector.id, index)}>
                     상세보기
                   </Button>
-                </Column>
-                <Column>
                   <Button
                     onClick={() => handleSendReportClick(collector.id, index)}
                   >

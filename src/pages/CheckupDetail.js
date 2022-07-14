@@ -14,6 +14,7 @@ import { checkupResultAtom } from "../atom";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+
   margin-left: 280px;
   padding: 0 40px;
 `;
@@ -23,20 +24,21 @@ const Title = styled.h1``;
 const List = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 50%;
 `;
 
 const Item = styled.div`
   width: 100%;
   height: 60px;
-  border: 1px solid black;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 10px;
+  margin-top: 10px;
 `;
 
 const Column = styled.div`
-  flex: 1;
   display: flex;
   flex-direction: column;
 `;
