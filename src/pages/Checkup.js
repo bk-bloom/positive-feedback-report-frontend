@@ -62,22 +62,20 @@ const MediumText = styled.span`
 `;
 
 function Checkup() {
-  const [projectList, setProjectList] = useRecoilState(checkupProjectListAtom);
+  // const [projectList, setProjectList] = useRecoilState(checkupProjectListAtom);
+  const [projectList, setProjectList] = useState([]);
   // const [projects, setProjects] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(projectList);
     async function fetchData() {
       const data = await getProjectsBySurveyId("400662208");
-      console.log("Checkup =>", data);
+      // console.log("Checkup =>", data);
       // setProjects(data);
-      setProjectList({ result: data });
+      setProjectList(data);
     }
 
-    if (projectList.result.length === 0) {
-      fetchData();
-    }
+    fetchData();
   }, []);
 
   const handleClick = (projectId, collectors) => {
@@ -88,8 +86,8 @@ function Checkup() {
       <Wrapper>
         <HeadSection title="마음 체크업 리포트 (준비중)" />
         <List>
-          {projectList.result.length > 0 &&
-            projectList.result.map((project) => (
+          {projectList.length > 0 &&
+            projectList.map((project) => (
               <Item
                 key={project.id}
                 onClick={() => handleClick(project.id, project.collectors)}

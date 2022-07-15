@@ -253,7 +253,6 @@ export const getMaumCheckupResponses = async (collectorId) => {
   );
   //   console.log(response.data.data[0].pages[0].questions);
   const responses = response.data.data;
-  console.log(responses);
   const dest = [];
   for (let i = 0; i < responses.length; i++) {
     const obj = {};
@@ -305,9 +304,46 @@ export const getMaumCheckupNameWithResponses = async (collectorIds) => {
         }
         data.push(dest);
       }
-      console.log(data);
       return data;
     });
 
   return allResponses;
+};
+
+export const saveResponsesToDB = async (responses, projectId) => {
+  const obj = {};
+  for (let i = 0; i < responses.length; i++) {
+    for (const email of Object.keys(responses[i])) {
+      if (obj[email] === undefined) {
+        obj[email] = {};
+      }
+      // obj[email].push(responses[i][email]);
+      obj[email][`week${i + 1}`] = responses[i][email];
+    }
+  }
+  const checkups = [];
+
+  for (const email of Object.keys(obj)) {
+    let name;
+    for (const week of Object.keys(obj[email])) {
+      if (obj[email][week].length > 0) {
+        name = obj[email][week][0];
+      }
+    }
+    checkups.push({
+      projectId,
+      email,
+      name,
+      week1: obj[email].week1 ? obj[email].week1 : [],
+      week2: obj[email].week2 ? obj[email].week2 : [],
+      week3: obj[email].week3 ? obj[email].week3 : [],
+      week4: obj[email].week4 ? obj[email].week4 : [],
+    });
+  }
+
+  const response = await axios.post("http://localhost:8080/checkup", {
+    data: checkups,
+  });
+
+  return true;
 };

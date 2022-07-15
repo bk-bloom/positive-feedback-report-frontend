@@ -8,6 +8,7 @@ import {
   getMaumCheckupNameWithResponses,
   getMaumCheckupResponses,
   getRecipients,
+  saveResponsesToDB,
 } from "../api";
 import { checkupCollectorResponseListAtom, checkupResultAtom } from "../atom";
 
@@ -76,28 +77,30 @@ function CheckupCollectors() {
   const countRef = useRef(0);
 
   useEffect(() => {
-    console.log(checkupCollectorResponses);
+    // console.log(checkupCollectorResponses);
     async function fetchData() {
+      // Get Data from SurveyMonkey
       // const data = []; // [{email: [1주차 답변], email2: [1주차 답변]}, {2주차 답변}, {3주차 답변}, {4주차 답변}]
       const data = await getMaumCheckupNameWithResponses(
         collectors.map((collector) => collector.id)
       );
       console.log(data);
+
+      // Save To DB
+      const response = await saveResponsesToDB(data, projectId);
+
       setCheckupCollectorResponses({ result: data });
       setIsLoading(false);
-      console.log("loading end");
     }
     if (process.env.NODE_ENV === "development") {
       if (countRef.current === 0) {
         if (checkupCollectorResponses.result.length === 0) {
-          console.log("loading");
           setIsLoading(true);
           fetchData();
           countRef.current += 1;
         }
       }
     } else if (process.env.NODE_ENV !== "development") {
-      console.log("loading");
       setIsLoading(true);
       fetchData();
     }
@@ -133,21 +136,6 @@ function CheckupCollectors() {
       }
     );
     console.log(response);
-    // console.log("Save to DB");
-    // const response = await axios.post(
-    //   "http://localhost:8080/checkup",
-    //   JSON.stringify({
-    //     projectId,
-    //     collectorId,
-    //     week: index + 1,
-    //     data: checkupCollectorResponses.result[index],
-    //   }),
-    // {
-    //   headers: { "Content-Type": "Application/json" },
-    // }
-    // );
-    // console.log(response.data);
-
     console.log("Send Report");
   };
   // console.log("Checkup Detail => ", checkupResponse);

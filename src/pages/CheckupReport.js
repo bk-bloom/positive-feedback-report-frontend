@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { WeeklyChart } from "../components/WeeklyChart";
 import { RadarChart } from "../components/RadarChart";
 import { Chart } from "../components/Chart";
+import axios from "axios";
 
 const Container = styled.div`
   margin-left: 280px;
@@ -83,24 +84,28 @@ function CheckupReport() {
   const [myScore, setMyScore] = useState(0);
   const [companyScore, setCompanyScore] = useState(0);
 
-  const calculateAverage = (type) => {
+  const calculateAverage = (type, data) => {
     const temp = [0, 0, 0, 0, 0, 0];
     let count = 0;
     if (type === "company") {
-      for (const key in result) {
-        for (let i = 0; i < result[key].length; i++) {
-          for (let j = 1; j <= 6; j++) {
-            temp[j - 1] += Number(result[key][i][j]);
+      for (let i = 0; i < data.length; i++) {
+        for (let j = 1; j <= 4; j++) {
+          if (data[i][`week${j}`].length > 0) {
+            for (let k = 2; k <= 7; k++) {
+              temp[k - 2] += Number(data[i][`week${j}`][k]);
+            }
+            count++;
           }
-          count++;
         }
       }
     } else {
       for (let i = 0; i < result.length; i++) {
-        for (let j = 1; j <= 6; j++) {
-          temp[j - 1] += Number(result[i][j]);
+        if (result[i].length > 0) {
+          for (let j = 2; j <= 7; j++) {
+            temp[j - 2] += Number(result[i][j]);
+          }
+          count++;
         }
-        count++;
       }
     }
     temp.forEach((n, index, prev) => {
@@ -133,8 +138,17 @@ function CheckupReport() {
   };
 
   useEffect(() => {
-    setCompantAverage(calculateAverage("company"));
-    setMyAverage(calculateAverage("me"));
+    const fetchData = async () => {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_DOMAIN}/checkup?all=true`
+      );
+
+      setCompantAverage(calculateAverage("company", response.data));
+      setMyAverage(calculateAverage("me"));
+    };
+    if (week === 3) {
+      fetchData();
+    }
   }, []);
 
   return (
@@ -179,25 +193,29 @@ function CheckupReport() {
         )}
 
         <h2>💡지난 마음 체크업 결과</h2>
-        {week === 4 && (
-          <>
-            <h3>📆 월간 그래프</h3>
-            <P>
-              지난달 나의 마음 건강 점수는 {myScore}점으로 우리 회사 평균{" "}
-              {companyScore}점 대비{" "}
-              {parseFloat((myScore - companyScore).toFixed(1))}점{" "}
-              {myScore > companyScore ? "높게" : "낮게"} 나타났습니다. (100점
-              만점 환산) 나의 마음 건강이 전반적으로 균형감 있게 튼튼한지, 어떤
-              부분이 강하고 약하게 나타나는지 살펴보세요.
-            </P>
-            <RadarChart companyAverage={companyAverage} myAverage={myAverage} />
-            <P>
-              7월 나의 마음 건강 평균 : 긍정정서 {myAverage[0]}, 몰입{" "}
-              {myAverage[1]}, 관계 {myAverage[2]}, 의미 {myAverage[3]}, 성취{" "}
-              {myAverage[4]}, 활력 {myAverage[5]}
-            </P>
-          </>
-        )}
+        {week === 4 ||
+          (week === 3 && (
+            <>
+              <h3>📆 월간 그래프</h3>
+              <P>
+                지난달 나의 마음 건강 점수는 {myScore}점으로 우리 회사 평균{" "}
+                {companyScore}점 대비{" "}
+                {parseFloat((myScore - companyScore).toFixed(1))}점{" "}
+                {myScore > companyScore ? "높게" : "낮게"} 나타났습니다. (100점
+                만점 환산) 나의 마음 건강이 전반적으로 균형감 있게 튼튼한지,
+                어떤 부분이 강하고 약하게 나타나는지 살펴보세요.
+              </P>
+              <RadarChart
+                companyAverage={companyAverage}
+                myAverage={myAverage}
+              />
+              <P>
+                7월 나의 마음 건강 평균 : 긍정정서 {myAverage[0]}, 몰입{" "}
+                {myAverage[1]}, 관계 {myAverage[2]}, 의미 {myAverage[3]}, 성취{" "}
+                {myAverage[4]}, 활력 {myAverage[5]}
+              </P>
+            </>
+          ))}
 
         <h3>📈 주간 그래프</h3>
         <P>
