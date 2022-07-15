@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { getCollectorsBySurveyId, getProjectsBySurveyId } from "../api";
-import { checkupProjectListAtom } from "../atom";
 import FlexColumn from "../components/FlexColumn";
 import FlexRow from "../components/FlexRow";
 import HeadSection from "../components/HeadSection";
+import Loading from "../components/Loading";
+import Modal from "../components/Modal";
 
 const Container = styled.div`
   padding: 0 40px;
@@ -62,24 +62,23 @@ const MediumText = styled.span`
 `;
 
 function Checkup() {
-  // const [projectList, setProjectList] = useRecoilState(checkupProjectListAtom);
   const [projectList, setProjectList] = useState([]);
-  // const [projects, setProjects] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
+      setIsLoading(true);
       const data = await getProjectsBySurveyId("400662208");
-      // console.log("Checkup =>", data);
-      // setProjects(data);
       setProjectList(data);
+      setIsLoading(false);
     }
 
     fetchData();
   }, []);
 
-  const handleClick = (projectId, collectors) => {
-    navigate(projectId, { state: { collectors } });
+  const handleClick = (projectId, collectors, projectTitle) => {
+    navigate(projectId, { state: { collectors, projectTitle } });
   };
   return (
     <Container>
@@ -90,7 +89,9 @@ function Checkup() {
             projectList.map((project) => (
               <Item
                 key={project.id}
-                onClick={() => handleClick(project.id, project.collectors)}
+                onClick={() =>
+                  handleClick(project.id, project.collectors, project.title)
+                }
               >
                 <FlexColumn>
                   <SmallText fontWeight="bold">{project.id}</SmallText>
@@ -103,6 +104,11 @@ function Checkup() {
             ))}
         </List>
       </Wrapper>
+      {isLoading && (
+        <Modal>
+          <Loading message="데이터 불러오는 중..." />
+        </Modal>
+      )}
     </Container>
   );
 }

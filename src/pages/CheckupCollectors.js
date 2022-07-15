@@ -13,6 +13,8 @@ import {
 } from "../api";
 import { checkupCollectorResponseListAtom, checkupResultAtom } from "../atom";
 import FlexRow from "../components/FlexRow";
+import Loading from "../components/Loading";
+import Modal from "../components/Modal";
 
 const Container = styled.div`
   display: flex;
@@ -32,7 +34,9 @@ const Title = styled.h1``;
 
 const List = styled.div`
   display: flex;
+  flex-wrap: wrap;
   width: 100%;
+  margin-top: 50px;
 `;
 
 const Item = styled.div`
@@ -74,7 +78,7 @@ const Button = styled.button`
 function CheckupCollectors() {
   const { projectId } = useParams();
   const {
-    state: { collectors },
+    state: { collectors, projectTitle },
   } = useLocation();
   const navigate = useNavigate();
 
@@ -129,6 +133,7 @@ function CheckupCollectors() {
       return;
     } else {
       // Load Data from DB
+      setIsLoading(true);
       fetchDataFromDB();
     }
   }, []);
@@ -151,7 +156,7 @@ function CheckupCollectors() {
   };
 
   const handleSendReportClick = async (collectorId, index) => {
-    console.log(projectId, collectorId, checkupCollectorResponses[index]);
+    setIsLoading(true);
     const response = await axios.post(
       `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/email`,
       JSON.stringify({
@@ -162,7 +167,7 @@ function CheckupCollectors() {
         headers: { "Content-Type": "Application/json" },
       }
     );
-    console.log(response);
+    setIsLoading(false);
     console.log("Send Report");
   };
   // console.log("Checkup Detail => ", checkupResponse);
@@ -172,7 +177,9 @@ function CheckupCollectors() {
         <FlexRow
           type={{ "justify-content": "space-between", "align-items": "center" }}
         >
-          <Title>{projectId}</Title>
+          <Title>
+            [{projectId}] {projectTitle}
+          </Title>
           <Button
             style={{
               height: "40px",
@@ -185,37 +192,36 @@ function CheckupCollectors() {
             새로고침
           </Button>
         </FlexRow>
-        {isLoading ? (
-          "Loading..."
-        ) : (
-          <List>
-            {collectors.length < 1
-              ? "데이터가 없습니다"
-              : collectors.map((collector, index) => (
-                  <Item key={collector.id}>
-                    <Column>
-                      {index + 1}주차 리포트 (
-                      {checkupCollectorResponses.length !== 0 &&
-                        Object.keys(checkupCollectorResponses[index]).length}
-                      )
-                    </Column>
-                    <Column>
-                      <Button onClick={() => handleClick(collector.id, index)}>
-                        상세보기
-                      </Button>
-                      <Button
-                        onClick={() =>
-                          handleSendReportClick(collector.id, index)
-                        }
-                      >
-                        리포트 전체 발송
-                      </Button>
-                    </Column>
-                  </Item>
-                ))}
-          </List>
-        )}
+        <List>
+          {collectors.length < 1
+            ? "데이터가 없습니다"
+            : collectors.map((collector, index) => (
+                <Item key={collector.id}>
+                  <Column>
+                    {index + 1}주차 리포트 (
+                    {checkupCollectorResponses.length !== 0 &&
+                      Object.keys(checkupCollectorResponses[index]).length}
+                    )
+                  </Column>
+                  <Column>
+                    <Button onClick={() => handleClick(collector.id, index)}>
+                      상세보기
+                    </Button>
+                    <Button
+                      onClick={() => handleSendReportClick(collector.id, index)}
+                    >
+                      리포트 전체 예약 발송
+                    </Button>
+                  </Column>
+                </Item>
+              ))}
+        </List>
       </Wrapper>
+      {isLoading && (
+        <Modal>
+          <Loading message="로딩중..." />
+        </Modal>
+      )}
     </Container>
   );
 }

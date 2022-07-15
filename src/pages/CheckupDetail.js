@@ -64,7 +64,7 @@ function CheckupDetail() {
   const [responses, setResponses] = useState();
   const countRef = useRef(0);
 
-  console.log("Checkup Detail State =>", week, result);
+  // console.log("Checkup Detail State =>", week, result);
 
   const getCheckupResponseFromDB = async (email) => {
     const response = await axios.get(
@@ -74,24 +74,26 @@ function CheckupDetail() {
   };
 
   const handleClick = async (email, name) => {
-    const response = await getCheckupResponseFromDB(email);
-    console.log(response, result);
+    // const response = await getCheckupResponseFromDB(email);
+    // console.log(response, result);
     let dest = [];
 
-    if (response.length === 0) {
-      // state로 리포트 생성
-      console.log("Data from State!");
-      for (let i = 0; i <= week; i++) {
-        dest.push(result[i][email]);
-      }
-    } else {
-      // DB 데이터로 리포트 생성
-      console.log("Data from DB!", response);
-      for (let i = 0; i <= week; i++) {
-        dest.push(response[`week${i + 1}`]);
-      }
+    // if (response.length === 0) {
+    //   // state로 리포트 생성
+    //   console.log("Data from State!");
+    //   for (let i = 0; i <= week; i++) {
+    //     dest.push(result[i][email]);
+    //   }
+    // } else {
+    //   // DB 데이터로 리포트 생성
+    //   console.log("Data from DB!", response);
+    //   for (let i = 0; i <= week; i++) {
+    //     dest.push(response[`week${i + 1}`]);
+    //   }
+    // }
+    for (let i = 0; i <= week; i++) {
+      dest.push(result[i][email] ? result[i][email] : []);
     }
-    // console.log(dest);
     navigate("report", {
       state: {
         name,

@@ -77,7 +77,7 @@ function CheckupReport() {
     state: { name, week, result },
   } = useLocation();
 
-  console.log("Checkup Report State =>", useLocation().state);
+  // console.log("Checkup Report State =>", useLocation().state);
 
   const [companyAverage, setCompantAverage] = useState([]);
   const [myAverage, setMyAverage] = useState([]);
