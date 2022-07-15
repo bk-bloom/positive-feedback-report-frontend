@@ -352,3 +352,11 @@ export const saveResponsesToDB = async (responses, projectId) => {
 
   return true;
 };
+
+export const loadResponsesFromDB = async () => {
+  const response = await axios.get(
+    `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/responses`
+  );
+
+  return response.data;
+};

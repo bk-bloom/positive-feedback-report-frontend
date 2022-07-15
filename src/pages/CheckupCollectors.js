@@ -8,15 +8,24 @@ import {
   getMaumCheckupNameWithResponses,
   getMaumCheckupResponses,
   getRecipients,
+  loadResponsesFromDB,
   saveResponsesToDB,
 } from "../api";
 import { checkupCollectorResponseListAtom, checkupResultAtom } from "../atom";
+import FlexRow from "../components/FlexRow";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 280px;
   padding: 0 40px;
+  align-items: center;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 60%;
 `;
 
 const Title = styled.h1``;
@@ -46,7 +55,6 @@ const Column = styled.div`
 
 const Button = styled.button`
   padding: 10px;
-  width: 100%;
   cursor: pointer;
   border: none;
   background-color: #ff812c;
@@ -70,8 +78,11 @@ function CheckupCollectors() {
   } = useLocation();
   const navigate = useNavigate();
 
-  const [checkupCollectorResponses, setCheckupCollectorResponses] =
-    useRecoilState(checkupCollectorResponseListAtom);
+  // const [checkupCollectorResponses, setCheckupCollectorResponses] =
+  //   useRecoilState(checkupCollectorResponseListAtom);
+  const [checkupCollectorResponses, setCheckupCollectorResponses] = useState(
+    []
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   const countRef = useRef(0);
@@ -89,47 +100,63 @@ function CheckupCollectors() {
       // Save To DB
       const response = await saveResponsesToDB(data, projectId);
 
-      setCheckupCollectorResponses({ result: data });
+      window.localStorage.setItem("isResponsesLoaded", true);
+      setCheckupCollectorResponses(data);
       setIsLoading(false);
+    }
+    async function fetchDataFromDB() {
+      const responses = await loadResponsesFromDB();
+      setCheckupCollectorResponses(responses);
     }
     if (process.env.NODE_ENV === "development") {
       if (countRef.current === 0) {
-        if (checkupCollectorResponses.result.length === 0) {
+        if (!window.localStorage.getItem("isResponsesLoaded")) {
           setIsLoading(true);
           fetchData();
-          countRef.current += 1;
+        } else {
+          // Load Data from DB
+          fetchDataFromDB();
         }
+        countRef.current += 1;
       }
-    } else if (process.env.NODE_ENV !== "development") {
+
+      return;
+    }
+
+    if (!window.localStorage.getItem("isResponsesLoaded")) {
       setIsLoading(true);
       fetchData();
+      return;
+    } else {
+      // Load Data from DB
+      fetchDataFromDB();
     }
   }, []);
 
   const handleClick = (id, index) => {
-    console.log(
-      index,
-      checkupCollectorResponses.result.slice(index - 1, index + 1)
-    );
     navigate(id, {
       state: {
         week: index,
-        result: checkupCollectorResponses.result,
+        result: checkupCollectorResponses,
       },
     });
   };
 
-  const handleSendReportClick = async (collectorId, index) => {
-    console.log(
-      projectId,
-      collectorId,
-      checkupCollectorResponses.result[index]
+  const handleRefreshClick = async () => {
+    const data = await getMaumCheckupNameWithResponses(
+      collectors.map((collector) => collector.id)
     );
+    setCheckupCollectorResponses(data);
+    await saveResponsesToDB(data, projectId);
+  };
+
+  const handleSendReportClick = async (collectorId, index) => {
+    console.log(projectId, collectorId, checkupCollectorResponses[index]);
     const response = await axios.post(
       `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/email`,
       JSON.stringify({
         week: index + 1,
-        data: Object.keys(checkupCollectorResponses.result[index]),
+        data: Object.keys(checkupCollectorResponses[index]),
       }),
       {
         headers: { "Content-Type": "Application/json" },
@@ -141,36 +168,54 @@ function CheckupCollectors() {
   // console.log("Checkup Detail => ", checkupResponse);
   return (
     <Container>
-      <Title>{projectId}</Title>
-      {isLoading ? (
-        "Loading..."
-      ) : (
-        <List>
-          {collectors.length < 1
-            ? "데이터가 없습니다"
-            : collectors.map((collector, index) => (
-                <Item key={collector.id}>
-                  <Column>
-                    {index + 1}주차 리포트 (
-                    {checkupCollectorResponses.result.length !== 0 &&
-                      Object.keys(checkupCollectorResponses.result[index])
-                        .length}
-                    )
-                  </Column>
-                  <Column>
-                    <Button onClick={() => handleClick(collector.id, index)}>
-                      상세보기
-                    </Button>
-                    <Button
-                      onClick={() => handleSendReportClick(collector.id, index)}
-                    >
-                      리포트 전체 발송
-                    </Button>
-                  </Column>
-                </Item>
-              ))}
-        </List>
-      )}
+      <Wrapper>
+        <FlexRow
+          type={{ "justify-content": "space-between", "align-items": "center" }}
+        >
+          <Title>{projectId}</Title>
+          <Button
+            style={{
+              height: "40px",
+              backgroundColor: "white",
+              border: "1px solid rgba(0,0,0,0.2)",
+              color: "#ff812c",
+            }}
+            onClick={handleRefreshClick}
+          >
+            새로고침
+          </Button>
+        </FlexRow>
+        {isLoading ? (
+          "Loading..."
+        ) : (
+          <List>
+            {collectors.length < 1
+              ? "데이터가 없습니다"
+              : collectors.map((collector, index) => (
+                  <Item key={collector.id}>
+                    <Column>
+                      {index + 1}주차 리포트 (
+                      {checkupCollectorResponses.length !== 0 &&
+                        Object.keys(checkupCollectorResponses[index]).length}
+                      )
+                    </Column>
+                    <Column>
+                      <Button onClick={() => handleClick(collector.id, index)}>
+                        상세보기
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          handleSendReportClick(collector.id, index)
+                        }
+                      >
+                        리포트 전체 발송
+                      </Button>
+                    </Column>
+                  </Item>
+                ))}
+          </List>
+        )}
+      </Wrapper>
     </Container>
   );
 }
