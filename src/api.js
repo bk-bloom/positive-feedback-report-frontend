@@ -342,7 +342,7 @@ export const saveResponsesToDB = async (responses, projectId) => {
       week4: obj[email].week4 ? obj[email].week4 : [],
     });
   }
-
+  console.log(`${process.env.REACT_APP_SERVER_DOMAIN}/checkup`);
   const response = await axios.post(
     `${process.env.REACT_APP_SERVER_DOMAIN}/checkup`,
     {
