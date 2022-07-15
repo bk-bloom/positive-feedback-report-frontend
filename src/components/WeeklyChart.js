@@ -133,14 +133,14 @@ export function WeeklyChart({ result, week }) {
     datasets: [
       {
         label: "이번 주",
-        data: [10, 10, 1, 10, 10, 10],
+        data: result[week === 4 ? 3 : week].slice(2, 8),
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgb(53, 162, 235)",
         borderWidth: 2,
       },
       {
         label: "지난 주",
-        data: [10, 10, 8, 8, 9, 10],
+        data: week === 0 ? [] : result[week === 4 ? 2 : week - 1].slice(2, 8),
         borderDash: [5, 5],
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgb(255, 99, 132)",
@@ -153,34 +153,32 @@ export function WeeklyChart({ result, week }) {
     ],
   });
   useEffect(() => {
-    if (week === 0) {
-      const obj = {
-        ...data,
-        datasets: [data.datasets[0]],
-      };
-      obj.datasets[0].data = result[0].slice(2, 8);
-      setData(obj);
-    }
+    // if (week === 0) {
+    //   const obj = {
+    //     ...data,
+    //     datasets: [data.datasets[0]],
+    //   };
+    //   obj.datasets[0].data = result[0].slice(2, 8);
+    //   setData(obj);
+    // }
     // else if (week === 4) {
     //   const obj = {
     //     ...data,
     //   };
-
     //   obj.datasets[0].data = result[week].slice(2, 8);
     //   obj.datasets[1].data = result[week - 1].slice(2, 8);
     //   console.log(obj);
     //   setData(obj);
     // }
-    else {
-      const obj = {
-        ...data,
-      };
-
-      obj.datasets[0].data = result[week].slice(2, 8);
-      obj.datasets[1].data = result[week - 1].slice(2, 8);
-      console.log(obj);
-      setData(obj);
-    }
+    // else {
+    //   const obj = {
+    //     ...data,
+    //   };
+    //   obj.datasets[0].data = result[week].slice(2, 8);
+    //   obj.datasets[1].data = result[week - 1].slice(2, 8);
+    //   console.log(obj);
+    //   setData(obj);
+    // }
     // setData();
   }, []);
   return (
