@@ -111,6 +111,7 @@ function CheckupCollectors() {
     async function fetchDataFromDB() {
       const responses = await loadResponsesFromDB();
       setCheckupCollectorResponses(responses);
+      setIsLoading(false);
     }
     if (process.env.NODE_ENV === "development") {
       if (countRef.current === 0) {
@@ -130,7 +131,6 @@ function CheckupCollectors() {
     if (!window.localStorage.getItem("isResponsesLoaded")) {
       setIsLoading(true);
       fetchData();
-      return;
     } else {
       // Load Data from DB
       setIsLoading(true);
