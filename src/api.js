@@ -2,7 +2,9 @@ import axios from "axios";
 import { postivieQuestionChoices } from "./db";
 
 export async function getData(name) {
-  const response = await axios.get(`http://localhost:8080/report?name=${name}`);
+  const response = await axios.get(
+    `${process.env.REACT_APP_SERVER_DOMAIN}/report?name=${name}`
+  );
 
   return response.data;
 }
@@ -341,9 +343,12 @@ export const saveResponsesToDB = async (responses, projectId) => {
     });
   }
 
-  const response = await axios.post("http://localhost:8080/checkup", {
-    data: checkups,
-  });
+  const response = await axios.post(
+    `${process.env.REACT_APP_SERVER_DOMAIN}/checkup`,
+    {
+      data: checkups,
+    }
+  );
 
   return true;
 };

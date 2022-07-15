@@ -68,7 +68,7 @@ function CheckupDetail() {
 
   const getCheckupResponseFromDB = async (email) => {
     const response = await axios.get(
-      `http://localhost:8080/checkup?email=${email}`
+      `${process.env.REACT_APP_SERVER_DOMAIN}/checkup?email=${email}`
     );
     return response.data[0];
   };

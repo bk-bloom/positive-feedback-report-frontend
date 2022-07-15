@@ -126,7 +126,7 @@ function CheckupCollectors() {
       checkupCollectorResponses.result[index]
     );
     const response = await axios.post(
-      "http://localhost:8080/checkup/email",
+      `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/email`,
       JSON.stringify({
         week: index + 1,
         data: Object.keys(checkupCollectorResponses.result[index]),
