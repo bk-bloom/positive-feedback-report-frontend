@@ -65,7 +65,13 @@ function CheckupRecommend({ intervention }) {
           <Box>
             <Span>⏰ 소요 시간: {intervention.duration}</Span>
             <Span>🌄 추천 시간: {intervention.recommendAt}</Span>
-            <Span>🌟 난이도 : {intervention.level}</Span>
+            <Span>
+              🌟 난이도 :{" "}
+              {new Array(3).fill(0).map((i, index) => {
+                if (index < intervention.level) return "★";
+                else return "☆";
+              })}
+            </Span>
           </Box>
         </FlexColumn>
       </FlexRow>

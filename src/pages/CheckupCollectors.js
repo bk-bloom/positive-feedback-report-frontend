@@ -1,17 +1,12 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import {
-  getCollectorRecipientsByCollectorId,
   getMaumCheckupNameWithResponses,
-  getMaumCheckupResponses,
-  getRecipients,
   loadResponsesFromDB,
   saveResponsesToDB,
 } from "../api";
-import { checkupCollectorResponseListAtom, checkupResultAtom } from "../atom";
 import FlexRow from "../components/FlexRow";
 import Loading from "../components/Loading";
 import Modal from "../components/Modal";
@@ -27,16 +22,18 @@ const Container = styled.div`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 60%;
+  width: 80%;
 `;
 
-const Title = styled.h1``;
+const Title = styled.h1`
+  margin-bottom: 5rem;
+`;
 
 const List = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  margin-top: 50px;
+  margin-top: 2rem;
 `;
 
 const Item = styled.div`
@@ -82,33 +79,58 @@ function CheckupCollectors() {
   } = useLocation();
   const navigate = useNavigate();
 
-  // const [checkupCollectorResponses, setCheckupCollectorResponses] =
-  //   useRecoilState(checkupCollectorResponseListAtom);
   const [checkupCollectorResponses, setCheckupCollectorResponses] = useState(
     []
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [lastUpdate, setLastUpdate] = useState("");
 
   const countRef = useRef(0);
+
+  async function getResponses() {
+    setIsLoading(true);
+    // Get Data from SurveyMonkey
+    // const data = []; // [{email: [1주차 답변], email2: [1주차 답변]}, {2주차 답변}, {3주차 답변}, {4주차 답변}]
+    const data = await getMaumCheckupNameWithResponses(
+      collectors.map((collector) => collector.id)
+    );
+    console.log(data);
+
+    // Save To DB
+    const response = await saveResponsesToDB(data, projectId);
+
+    window.localStorage.setItem("isResponsesLoaded", true);
+    setCheckupCollectorResponses(data);
+
+    // setLastUpdate(
+    //   `${new Date().getFullYear()}-${
+    //     new Date().getMonth() + 1
+    //   }-${new Date().getDate()}   ${new Date().toTimeString().split(" ")[0]}`
+    // );
+    setIsLoading(false);
+  }
 
   useEffect(() => {
     // console.log(checkupCollectorResponses);
     async function fetchData() {
       // Get Data from SurveyMonkey
       // const data = []; // [{email: [1주차 답변], email2: [1주차 답변]}, {2주차 답변}, {3주차 답변}, {4주차 답변}]
-      const data = await getMaumCheckupNameWithResponses(
-        collectors.map((collector) => collector.id)
-      );
-      console.log(data);
+      // const data = await getMaumCheckupNameWithResponses(
+      //   collectors.map((collector) => collector.id)
+      // );
+      // console.log(data);
 
-      // Save To DB
-      const response = await saveResponsesToDB(data, projectId);
+      // // Save To DB
+      // const response = await saveResponsesToDB(data, projectId);
 
-      window.localStorage.setItem("isResponsesLoaded", true);
-      setCheckupCollectorResponses(data);
-      setIsLoading(false);
+      // window.localStorage.setItem("isResponsesLoaded", true);
+      // setCheckupCollectorResponses(data);
+      // setLastUpdate(new Date().toTimeString().split(" ")[0]);
+      // setIsLoading(false);
+      await getResponses();
     }
     async function fetchDataFromDB() {
+      setIsLoading(true);
       const responses = await loadResponsesFromDB();
       setCheckupCollectorResponses(responses);
       setIsLoading(false);
@@ -116,7 +138,6 @@ function CheckupCollectors() {
     if (process.env.NODE_ENV === "development") {
       if (countRef.current === 0) {
         if (!window.localStorage.getItem("isResponsesLoaded")) {
-          setIsLoading(true);
           fetchData();
         } else {
           // Load Data from DB
@@ -124,16 +145,13 @@ function CheckupCollectors() {
         }
         countRef.current += 1;
       }
-
       return;
     }
 
     if (!window.localStorage.getItem("isResponsesLoaded")) {
-      setIsLoading(true);
       fetchData();
     } else {
       // Load Data from DB
-      setIsLoading(true);
       fetchDataFromDB();
     }
   }, []);
@@ -148,13 +166,7 @@ function CheckupCollectors() {
   };
 
   const handleRefreshClick = async () => {
-    setIsLoading(true);
-    const data = await getMaumCheckupNameWithResponses(
-      collectors.map((collector) => collector.id)
-    );
-    setCheckupCollectorResponses(data);
-    await saveResponsesToDB(data, projectId);
-    setIsLoading(false);
+    await getResponses();
   };
 
   const handleSendReportClick = async (collectorId, index) => {
@@ -182,18 +194,20 @@ function CheckupCollectors() {
           <Title>
             [{projectId}] {projectTitle}
           </Title>
-          <Button
-            style={{
-              height: "40px",
-              backgroundColor: "white",
-              border: "1px solid rgba(0,0,0,0.2)",
-              color: "#ff812c",
-            }}
-            onClick={handleRefreshClick}
-          >
-            새로고침
-          </Button>
         </FlexRow>
+        <Button
+          style={{
+            height: "40px",
+            backgroundColor: "white",
+            border: "1px solid rgba(0,0,0,0.2)",
+            color: "#ff812c",
+            width: "80px",
+          }}
+          onClick={handleRefreshClick}
+        >
+          새로고침
+        </Button>
+        {/* <span>마지막 업데이트: {lastUpdate}</span> */}
         <List>
           {collectors.length < 1
             ? "데이터가 없습니다"

@@ -7,6 +7,42 @@ import { Chart } from "../components/Chart";
 import axios from "axios";
 import { interventions } from "../db";
 import CheckupRecommend from "../components/CheckupRecommend";
+import CheckupArea from "../components/CheckupArea";
+import CheckupReview from "../components/CheckupReview";
+import CheckupFooter from "../components/CheckupFooter";
+
+const permav = [
+  {
+    name: "긍정정서",
+    word: "Positive Emotions",
+    color: "#ed2b2b",
+  },
+  {
+    name: "몰입",
+    word: "Engagement",
+    color: "#ff812c",
+  },
+  {
+    name: "관계",
+    word: "Relationships",
+    color: "#ffc842",
+  },
+  {
+    name: "의미",
+    word: "Meaning",
+    color: "#dae233",
+  },
+  {
+    name: "성취",
+    word: "Accomplishment",
+    color: "#00c0e0",
+  },
+  {
+    name: "활력",
+    word: "Vitality",
+    color: "#7ca1d4",
+  },
+];
 
 const Container = styled.div`
   margin-left: 280px;
@@ -26,6 +62,11 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.h1``;
+
+const SectionTitle = styled.h2`
+  margin-top: 2rem;
+  margin-bottom: 0;
+`;
 
 const List = styled.div`
   display: flex;
@@ -56,6 +97,7 @@ const Banner = styled.img`
 const ChartContainer = styled.section`
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 3rem;
 `;
 
 const ChartItem = styled.div`
@@ -70,8 +112,14 @@ const P = styled.p`
   line-height: 2;
 `;
 
-const Li = styled.li`
-  line-height: 2;
+const Span = styled.span`
+  font-size: 1.1rem;
+  font-weight: bold;
+`;
+
+const ColorSpan = styled.span`
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
 `;
 
 function CheckupReport() {
@@ -190,7 +238,7 @@ function CheckupReport() {
           ))}
         </Item>
       </List> */}
-        {week < 4 ? (
+        {week < 3 ? (
           <>
             <P>
               '지난 주 나는 어떤 마음으로 일했더라?' <br />
@@ -215,7 +263,8 @@ function CheckupReport() {
           </P>
         )}
 
-        <h2>💡지난 마음 체크업 결과</h2>
+        <SectionTitle>💡지난 마음 체크업 결과</SectionTitle>
+        <hr style={{ width: "100%" }} />
         {week === 4 ||
           (week === 3 && (
             <>
@@ -249,64 +298,26 @@ function CheckupReport() {
         <WeeklyChart result={result} week={week} />
 
         <ChartContainer>
-          <ChartItem>
-            <h4>긍정정서 (Positive Emotions) </h4>
-            <Chart result={extractColumn(2)} week={week} color="#ed2b2b" />
-          </ChartItem>
-          <ChartItem>
-            <h4>몰입 (Engagement)</h4>
-            <Chart result={extractColumn(3)} week={week} color="#ff812c" />
-          </ChartItem>
-          <ChartItem>
-            <h4>관계 (Relationships)</h4>
-            <Chart result={extractColumn(4)} week={week} color="#ffc842" />
-          </ChartItem>
-
-          <ChartItem>
-            <h4>의미 (Meaning)</h4>
-            <Chart result={extractColumn(5)} week={week} color="#dae233" />
-          </ChartItem>
-
-          <ChartItem>
-            <h4>성취 (Accomplishment)</h4>
-            <Chart result={extractColumn(6)} week={week} color="#00c0e0" />
-          </ChartItem>
-
-          <ChartItem>
-            <h4>활력 (Vitality)</h4>
-            <Chart result={extractColumn(7)} week={week} color="#7ca1d4" />
-          </ChartItem>
+          {permav.map((item, index) => (
+            <ChartItem key={index}>
+              <div>
+                <Span>{item.name}</Span>
+                <ColorSpan style={{ color: item.color }}>{item.word}</ColorSpan>
+              </div>
+              <Chart
+                result={extractColumn(index + 2)}
+                week={week}
+                color={item.color}
+              />
+            </ChartItem>
+          ))}
         </ChartContainer>
 
-        <h4>✏️ 지난 주에 남긴 기록</h4>
-        <P>- {result[week === 4 ? 3 : week][8]}</P>
+        <CheckupReview review={result[week === 4 ? 3 : week][8]} />
+        <CheckupArea />
 
-        <h4>📌 마음 리포트에서 살펴보는 마음 건강 영역</h4>
-        <P>
-          마음 리포트는 마틴 셀리그먼의 PERMA 웰빙 모델에 활력(Vitality)를
-          추가하여 직장인 일상의 멘탈웰빙을 체크하고 있습니다.
-        </P>
-        <Li>
-          일터에서 회복탄력성을 키우는 <b>긍정정서</b>(<b>P</b>ositive Emotions)
-        </Li>
-        <Li>
-          강점을 발휘하며 자기효능감을 높이는 <b>몰입</b>(<b>E</b>ngagement)
-        </Li>
-        <Li>
-          동료들과 감정, 생각, 비전을 함께 주고받는 <b>관계</b>(<b>R</b>
-          elationships)
-        </Li>
-        <Li>
-          일에 의미와 가치를 실현해 나가는 <b>의미</b>(<b>M</b>eaning)
-        </Li>
-        <Li>
-          목표를 달성하며 동기부여를 촉진하는 <b>성취</b>(<b>A</b>
-          ccomplishment)
-        </Li>
-        <Li>
-          건강한 에너지를 유지하는 <b>활력</b>(<b>V</b>itality)
-        </Li>
         {intervention && <CheckupRecommend intervention={intervention} />}
+        <CheckupFooter />
       </Wrapper>
     </Container>
   );
