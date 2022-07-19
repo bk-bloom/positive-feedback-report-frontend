@@ -5,6 +5,8 @@ import { WeeklyChart } from "../components/WeeklyChart";
 import { RadarChart } from "../components/RadarChart";
 import { Chart } from "../components/Chart";
 import axios from "axios";
+import { interventions } from "../db";
+import CheckupRecommend from "../components/CheckupRecommend";
 
 const Container = styled.div`
   margin-left: 280px;
@@ -83,6 +85,7 @@ function CheckupReport() {
   const [myAverage, setMyAverage] = useState([]);
   const [myScore, setMyScore] = useState(0);
   const [companyScore, setCompanyScore] = useState(0);
+  const [intervention, setIntervention] = useState();
 
   const calculateAverage = (type, data) => {
     const temp = [0, 0, 0, 0, 0, 0];
@@ -137,6 +140,25 @@ function CheckupReport() {
     return dest;
   };
 
+  const getRecommendIntervention = (points) => {
+    let category = 0;
+    let min = Number(points[0]);
+    for (let i = 0; i < points.length; i++) {
+      if (Number(points[i]) < min) {
+        min = Number(points[i]);
+        category = i;
+      }
+    }
+
+    let index = week;
+    if (interventions[category].length <= week) {
+      console.log("hi");
+      index = interventions[category].length % week;
+    }
+    // console.log(category, index, interventions[category][index]);
+    return interventions[category][index];
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
@@ -149,6 +171,7 @@ function CheckupReport() {
     if (week === 3) {
       fetchData();
     }
+    setIntervention(getRecommendIntervention(result[week].slice(2, 8)));
   }, []);
 
   return (
@@ -283,6 +306,7 @@ function CheckupReport() {
         <Li>
           건강한 에너지를 유지하는 <b>활력</b>(<b>V</b>itality)
         </Li>
+        {intervention && <CheckupRecommend intervention={intervention} />}
       </Wrapper>
     </Container>
   );

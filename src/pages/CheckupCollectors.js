@@ -148,11 +148,13 @@ function CheckupCollectors() {
   };
 
   const handleRefreshClick = async () => {
+    setIsLoading(true);
     const data = await getMaumCheckupNameWithResponses(
       collectors.map((collector) => collector.id)
     );
     setCheckupCollectorResponses(data);
     await saveResponsesToDB(data, projectId);
+    setIsLoading(false);
   };
 
   const handleSendReportClick = async (collectorId, index) => {
