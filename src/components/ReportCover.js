@@ -13,8 +13,8 @@ const COLORS = [
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 21cm;
-  height: 29.7cm;
+  width: 793.7007874px;
+  height: 1122.519685px;
   background-color: #ff812c;
   color: white;
 `;
@@ -22,22 +22,16 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  justify-content: center;
+  padding-left: 66.5px;
+  padding-top: 76.6px;
+  position: relative;
 `;
 
-const HeaderTopContainer = styled.div`
-  display: flex;
-`;
-
-const HeaderTopBorder = styled.div`
-  height: 10px;
-  width: 12.5%;
-  background-color: ${(props) => props.bgColor};
-`;
-
-const TitleContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
+const Logo = styled.img`
+  width: 102.8px;
+  height: 31.5px;
+  margin: 0 412.7px 70.9px 0;
+  object-fit: contain;
 `;
 
 const ColumnLeft = styled.div`
@@ -48,59 +42,131 @@ const ColumnLeft = styled.div`
   padding: 30px;
 `;
 
-const SubTitle = styled.h3`
-  font-size: 18px;
+const Title = styled.p`
+  width: 324px;
+  height: 122px;
+  margin: 0 4.9px 13px 0.1px;
+  font-family: PretendardVariable;
+  font-size: 52px;
   font-weight: bold;
-  margin: 0;
-`;
-
-const Title = styled.h1`
-  font-size: 48px;
-  font-weight: bold;
-  margin-top: 10px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.17;
+  letter-spacing: -2.08px;
+  text-align: left;
+  color: #fff;
 `;
 
 const Phrase = styled.p`
-  font-weight: bold;
-  font-size: 14px;
-  margin: 0;
+  width: 307px;
+  height: 19px;
+  margin: 0 19.9px 59px 0.1px;
+  opacity: 0.8;
+  font-family: PretendardVariable;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.19;
+  letter-spacing: 0.48px;
+  text-align: left;
+  color: #fff;
 `;
+
+const SubTitle = styled.span`
+  width: 264px;
+  height: 59px;
+  margin: 0 62.9px 41.5px 0.1px;
+  font-family: PretendardVariable;
+  font-size: 22px;
+  font-weight: 300;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: -0.88px;
+  text-align: left;
+  color: #fff;
+`;
+
+const Border = styled.div`
+  width: 327px;
+  height: 0;
+  margin: 0 0;
+  border: solid 5px #fff;
+`;
+
 const ColumnRight = styled(ColumnLeft)`
   flex: 1;
   justify-content: center;
   align-items: center;
 `;
 
+const NameContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 0 60.7px 86.7px 0;
+`;
 const Name = styled.span`
-  font-size: 24px;
-  font-weight: bold;
+  width: 113px;
+  height: 53px;
+  margin: 0 12px 0 0;
+  font-family: PretendardVariable;
+  font-size: 45px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.18;
+  letter-spacing: -1.8px;
+  text-align: left;
+  color: #fff;
+`;
+
+const Span = styled.span`
+  width: 26px;
+  height: 35px;
+  font-family: PretendardVariable;
+  font-size: 30px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.17;
+  letter-spacing: normal;
+  text-align: left;
+  color: #fff;
 `;
 
 function ReportCover({ name }) {
   return (
     <Container>
-      <HeaderTopContainer>
+      {/* <HeaderTopContainer>
         {COLORS.map((color, index) => (
           <HeaderTopBorder key={index} bgColor={color} />
         ))}
-      </HeaderTopContainer>
+      </HeaderTopContainer> */}
       <Wrapper>
-        <TitleContainer>
-          <ColumnLeft>
-            <SubTitle>
-              {" "}
-              두산공작기계 차장승진자를 위한 갈등관리 리더십 과정
-            </SubTitle>
-            <Title>긍정 피드백 설문 결과</Title>
-            <Phrase>
-              「It takes courage to grow up and become who you really are.」 E.
-              E. Cummings
-            </Phrase>
-          </ColumnLeft>
-          <ColumnRight>
-            <Name>{name}</Name>
-          </ColumnRight>
-        </TitleContainer>
+        <Logo
+          src={`${process.env.PUBLIC_URL}/assets/positive-feedback-cover-logo3x.png`}
+        />
+
+        <Title>
+          긍정 피드백
+          <br />
+          설문 결과 리포트
+        </Title>
+        <Phrase>Positive Feedback Survey Results Report</Phrase>
+
+        <SubTitle>
+          두산공작기계 차장승진자를 위한
+          <br />
+          <b style={{ "font-weight": "500" }}>갈등관리 리더십 과정</b>
+        </SubTitle>
+        <Border />
+
+        <NameContainer>
+          <Name>{name}</Name>
+          <Span>님</Span>
+        </NameContainer>
       </Wrapper>
     </Container>
   );

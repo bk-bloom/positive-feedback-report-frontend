@@ -262,7 +262,7 @@ function Report() {
               <Section>
                 <SectionHeader>구성원들이 보는 나의 강점</SectionHeader>
                 <SectionSubTitle>TOP 3</SectionSubTitle>
-                <Wordcloud data={reportData[0]} />
+                <Wordcloud data={reportData[0]} type="strength" />
                 <SectionSubTitle>강점 단어 모음</SectionSubTitle>
                 <SectionAllWords>
                   {reportData[0].map((word, index) => (
@@ -273,7 +273,7 @@ function Report() {
               <Section>
                 <SectionHeader>구성원들이 보는 나의 가치</SectionHeader>
                 <SectionSubTitle>TOP 3</SectionSubTitle>
-                <Wordcloud data={reportData[1]} />
+                <Wordcloud data={reportData[1]} type="value" />
                 <SectionSubTitle>가치 단어 모음</SectionSubTitle>
                 <SectionAllWords>
                   {reportData[1].map((word, index) => (
