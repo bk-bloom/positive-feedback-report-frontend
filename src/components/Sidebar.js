@@ -42,7 +42,7 @@ function Sidebar() {
 
   return (
     <Container>
-      <Logo src="../assets/logo.png" />
+      <Logo src={`${process.env.PUBLIC_URL}/assets/logo.png`} />
       <Item
         onClick={() => handleClick("/positive")}
         highlight={

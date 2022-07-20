@@ -12,7 +12,7 @@ const Title = styled.h1`
 function HeadSection({ title }) {
   return (
     <>
-      <Logo src="./assets/logo.png" />
+      <Logo src={`${process.env.PUBLIC_URL}/assets/logo.png`} />
       <Title>{title}</Title>
     </>
   );
