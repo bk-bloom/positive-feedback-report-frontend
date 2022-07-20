@@ -7,6 +7,7 @@ import { jsPDF } from "jspdf";
 import Wordcloud from "../components/Wordcloud";
 import ReportCover from "../components/ReportCover";
 import Loading from "../components/Loading";
+import A4 from "../components/A4";
 
 const COLORS = [
   "#CC2B69",
@@ -31,15 +32,18 @@ const Container = styled.div`
 const Wrapper = styled.div`
   // width: 60%;
   display: flex;
-  width: 21cm;
+  width: 793.7007874px;
+  // padding: 0 0 28.1px;
   flex-direction: column;
   // padding: 40px;
   // border: 1px solid black;
 `;
 
 const HeaderTopContainer = styled.div`
-  display: flex;
-  // margin-top: 20px;
+  width: 100%;
+  height: 28px;
+  margin: 0 0 55px;
+  background-color: #ff812c;
 `;
 const HeaderTopBorder = styled.div`
   height: 10px;
@@ -47,12 +51,28 @@ const HeaderTopBorder = styled.div`
   background-color: ${(props) => props.bgColor};
 `;
 const Header = styled.div`
-  width: 100%;
-  height: 80px;
-  background-color: #ff812c;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  width: 313px;
+  height: 89px;
+  margin: 0 0 73.7px;
+  font-family: PretendardVariable;
+  font-size: 35px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.37;
+  letter-spacing: -1.4px;
+  text-align: left;
+  color: #000;
+  position: relative;
+`;
+
+const HeaderBottomBar = styled.div`
+  position: absolute;
+  width: 228px;
+  height: 19px;
+  bottom: 0;
+  background-color: #fff3a4;
+  z-index: -1;
 `;
 const HeaderText = styled.span`
   color: white;
@@ -63,94 +83,163 @@ const HeaderText = styled.span`
 
 const SectionContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  padding: 20px;
+  flex-direction: column;
+  // padding: 0 52.9px;
+  width: 100%;
 `;
 const Section = styled.div`
   display: flex;
   flex-direction: column;
-  width: 45%;
-  margin-top: 40px;
 `;
 
 const SectionHeader = styled.div`
+  width: 100%;
+  height: 42.3px;
+  margin: 0 0 26px;
+  // padding: 9.3px 484.8px 11px 19.1px;
+  border-radius: 7px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  background-color: #ff812c;
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-  padding: 10px 0;
+  background-color: #fda76b;
 `;
 
-const SectionSubTitle = styled.div`
-  font-size: 18px;
-  //   margin-left: 40px;
-  margin-top: 20px;
-  margin-bottom: 10px;
+const SectionHeaderText = styled.span`
+  height: 22px;
+  font-family: PretendardVariable;
+  font-size: 19px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.21;
+  letter-spacing: -0.76px;
+  text-align: left;
+  color: #fff;
+  margin-left: 19.1px;
 `;
 
-const SectionTopWords = styled.div`
-  background-color: #f3f3f3;
+const SectionBody = styled.div`
+  display: flex;
+  padding: 0 22px;
+  margin-bottom: 60.7px;
+`;
+
+const SectionItem = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  padding: 20px 0;
 `;
 
-const TopWords = styled.span`
-  font-size: 18px;
-  margin: 10px;
+const SectionSubTitle = styled.p`
+  width: 88px;
+  height: 19px;
+  margin: 0 260px 13px 0;
+  font-family: PretendardVariable;
+  font-size: 16px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.44;
+  letter-spacing: -0.64px;
+  text-align: left;
+  color: #000;
+`;
+
+const AllWordsBorder = styled.div`
+  width: 313.7px;
+  height: 0;
+  margin: 0 0 0 0.8px;
+  opacity: 0.3;
+  border-top: solid 1px #707070;
 `;
 
 const SectionAllWords = styled.div`
   display: flex;
   flex-wrap: wrap;
-  background-color: #f3f3f3;
-  padding: 20px 10px;
+  width: 302px;
+  // height: 239px;
+  margin: 12.7px 12.5px 0 0;
+  font-family: PretendardVariable;
+  font-size: 13px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000;
+  // border: 1px solid black;
 `;
 
-const AllWords = styled.span`
-  font-size: 14px;
-  margin: 0 5px;
+const WordContainer = styled.div`
+  // width: 100%;
+  display: inline;
+  height: 16px;
+  align-items: center;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  // border: 1px solid black;
+`;
+const Word = styled.span`
+  width: 24px;
+  height: 16px;
+  margin-right: 1px;
+  font-family: PretendardVariable;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.86;
+  letter-spacing: -0.42px;
+  text-align: left;
+  color: #000;
+  // border: 1px solid black;
+`;
+
+const WordCount = styled.span`
+  width: 16px;
+  height: 12px;
+  font-size: 10px;
+  padding: 0 3px;
+  border-radius: 3px;
+  border: solid 1px #707070;
 `;
 
 const CommentContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  padding: 20px;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 const CommentSection = styled.div`
   display: flex;
-  margin: 10px 0;
-`;
-
-const CommentSectionTitle = styled.div`
-  background-color: #ff812c;
-  color: white;
-  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  width: 100px;
-  margin-right: 10px;
 `;
 
 const CommentSectionList = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: #f3f3f3;
   width: 100%;
-  padding: 5px 10px;
+`;
+
+const CommentDivider = styled.div`
+  width: 312px;
+  height: 0;
+  margin: 0 4.9px 15.5px 0;
+  opacity: 0.5;
+  border-top: solid 1px #707070;
 `;
 
 const CommentSectionItem = styled.p`
-  margin: 4px 0;
-  font-size: 14px;
+  width: 311.8px;
+  margin: 0 0 15.5px 5px;
+  font-family: PretendardVariable;
+  font-size: 15px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.6;
+  letter-spacing: -0.6px;
+  text-align: left;
+  color: #666;
+  // border-bottom: 1px solid black;
 `;
 
 const DownloadButton = styled.div`
@@ -250,67 +339,116 @@ function Report() {
         <>
           <Wrapper ref={printRef}>
             <ReportCover name={location.state.name} />
-            <HeaderTopContainer>
+            {/* <HeaderTopContainer>
               {COLORS.map((color, index) => (
                 <HeaderTopBorder key={index} bgColor={color} />
               ))}
-            </HeaderTopContainer>
-            <Header>
-              <HeaderText>긍정 피드백</HeaderText>
-            </Header>
-            <SectionContainer>
-              <Section>
-                <SectionHeader>구성원들이 보는 나의 강점</SectionHeader>
-                <SectionSubTitle>TOP 3</SectionSubTitle>
-                <Wordcloud data={reportData[0]} type="strength" />
-                <SectionSubTitle>강점 단어 모음</SectionSubTitle>
-                <SectionAllWords>
-                  {reportData[0].map((word, index) => (
-                    <AllWords key={index}>{`${word[0]} (${word[1]})`}</AllWords>
-                  ))}
-                </SectionAllWords>
-              </Section>
-              <Section>
-                <SectionHeader>구성원들이 보는 나의 가치</SectionHeader>
-                <SectionSubTitle>TOP 3</SectionSubTitle>
-                <Wordcloud data={reportData[1]} type="value" />
-                <SectionSubTitle>가치 단어 모음</SectionSubTitle>
-                <SectionAllWords>
-                  {reportData[1].map((word, index) => (
-                    <AllWords key={index}>{`${word[0]} (${word[1]})`}</AllWords>
-                  ))}
-                </SectionAllWords>
-              </Section>
-            </SectionContainer>
-            <CommentContainer>
-              <CommentSection>
-                <CommentSectionTitle>
-                  <span>감사와</span>
-                  <span>응원을</span>
-                  <span>보냅니다</span>
-                </CommentSectionTitle>
-                <CommentSectionList>
-                  {reportData[2].map((comment, index) => (
-                    <CommentSectionItem key={index}>
-                      - {comment}
-                    </CommentSectionItem>
-                  ))}
-                </CommentSectionList>
-              </CommentSection>
-              <CommentSection>
-                <CommentSectionTitle>
-                  <span>앞으로</span>
-                  <span>기대합니다</span>
-                </CommentSectionTitle>
-                <CommentSectionList>
-                  {reportData[3].map((comment, index) => (
-                    <CommentSectionItem key={index}>
-                      - {comment}
-                    </CommentSectionItem>
-                  ))}
-                </CommentSectionList>
-              </CommentSection>
-            </CommentContainer>
+            </HeaderTopContainer> */}
+            <A4>
+              <Header>
+                {location.state.name}{" "}
+                <b style={{ fontWeight: "normal" }}>님을 위한</b>
+                <br />
+                긍정 피드백 결과<b style={{ fontWeight: "normal" }}>입니다.</b>
+                <HeaderBottomBar />
+              </Header>
+              <SectionContainer>
+                <Section>
+                  <SectionHeader>
+                    <SectionHeaderText>
+                      구성원들이 보는{" "}
+                      <b style={{ fontWeight: "bold" }}>나의 강점</b>
+                    </SectionHeaderText>
+                  </SectionHeader>
+                  <SectionBody>
+                    <SectionItem>
+                      <SectionSubTitle>TOP 3</SectionSubTitle>
+                      <Wordcloud data={reportData[0]} type="strength" />
+                    </SectionItem>
+                    <SectionItem>
+                      <SectionSubTitle>강점 단어 모음</SectionSubTitle>
+                      <AllWordsBorder />
+                      <SectionAllWords>
+                        {reportData[0].map((word, index) => (
+                          <WordContainer>
+                            <Word key={index}>{word[0]}</Word>{" "}
+                            <WordCount>{word[1]}</WordCount>
+                          </WordContainer>
+                        ))}
+                      </SectionAllWords>
+                    </SectionItem>
+                  </SectionBody>
+                </Section>
+                <Section>
+                  <SectionHeader>
+                    <SectionHeaderText>
+                      구성원들이 보는{" "}
+                      <b style={{ fontWeight: "bold" }}>나의 가치</b>
+                    </SectionHeaderText>
+                  </SectionHeader>
+                  <SectionBody>
+                    <SectionItem>
+                      <SectionSubTitle>TOP 3</SectionSubTitle>
+                      <Wordcloud data={reportData[1]} type="value" />
+                    </SectionItem>
+                    <SectionItem>
+                      <SectionSubTitle>가치 단어 모음</SectionSubTitle>
+                      <SectionAllWords>
+                        {reportData[1].map((word, index) => (
+                          <WordContainer>
+                            <Word key={index}>{word[0]}</Word>{" "}
+                            <WordCount>{word[1]}</WordCount>
+                          </WordContainer>
+                        ))}
+                      </SectionAllWords>
+                    </SectionItem>
+                  </SectionBody>
+                </Section>
+              </SectionContainer>
+            </A4>
+            <A4 type="comment">
+              <Header>
+                {location.state.name}{" "}
+                <b style={{ fontWeight: "normal" }}>님을 위한</b>
+                <br />
+                긍정 피드백 결과<b style={{ fontWeight: "normal" }}>입니다.</b>
+                <HeaderBottomBar />
+              </Header>
+              <CommentContainer>
+                <CommentSection>
+                  <SectionHeader style={{ width: "331px" }}>
+                    <SectionHeaderText>
+                      감사와 응원을 보냅니다 😊
+                    </SectionHeaderText>
+                  </SectionHeader>
+                  <CommentSectionList>
+                    {reportData[2].map((comment, index) => (
+                      <>
+                        <CommentSectionItem key={index}>
+                          {comment}
+                        </CommentSectionItem>
+                        <CommentDivider />
+                      </>
+                    ))}
+                  </CommentSectionList>
+                </CommentSection>
+                <CommentSection>
+                  <SectionHeader style={{ width: "331px" }}>
+                    <SectionHeaderText>앞으로 기대합니다 🙏</SectionHeaderText>
+                  </SectionHeader>
+                  <CommentSectionList>
+                    {reportData[3].map((comment, index) => (
+                      <>
+                        <CommentSectionItem key={index}>
+                          {comment}
+                        </CommentSectionItem>
+                        <CommentDivider />
+                      </>
+                    ))}
+                  </CommentSectionList>
+                </CommentSection>
+              </CommentContainer>
+            </A4>
           </Wrapper>
           <DownloadButton onClick={handleDownloadPdf}>
             <span>PDF</span>

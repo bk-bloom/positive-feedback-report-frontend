@@ -12,12 +12,14 @@ import PositiveFeedback from "./pages/PositiveFeedback";
 import CheckupDetail from "./pages/CheckupDetail";
 import CheckupReport from "./pages/CheckupReport";
 import CheckupCollectors from "./pages/CheckupCollectors";
+import { Reset } from "styled-reset";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <RecoilRoot>
+        <Reset />
         <Sidebar />
         <Routes>
           <Route path="/" element={<PositiveFeedback />} />

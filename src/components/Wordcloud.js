@@ -4,10 +4,11 @@ import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
-  width: 100%;
+  width: 300px;
   justify-content: center;
   align-items: center;
-  // border: 1px solid black;
+  padding: 10px;
+  border: solid 1px #dedede;
 `;
 function Wordcloud({ data, type }) {
   const divRef = useRef();
@@ -17,9 +18,9 @@ function Wordcloud({ data, type }) {
   }
   list.forEach((d) => (d[1] = 1));
   list.slice(0, 3).forEach((d) => {
-    d[1] *= 9;
+    d[1] *= 7;
   });
-  console.log(list);
+  console.log(list.length);
   useEffect(() => {
     let i = 0;
     WordCloud(divRef.current, {
@@ -51,8 +52,8 @@ function Wordcloud({ data, type }) {
       <div
         id="canvas"
         style={{
-          width: "300px",
-          height: "180px",
+          width: "260px",
+          height: "220px",
           //   borderWidth: "1",
           //   borderColor: "black",
           //   borderStyle: "solid",
