@@ -192,6 +192,29 @@ const BannerTitle = styled.h1`
   text-align: left;
   color: #010101;
 `;
+
+const SummaryBox = styled.div`
+  height: 59px;
+  margin: 15px 0 83px;
+  padding-left: 24px;
+  display: flex;
+  align-items: center;
+  background-color: #f8f8f8;
+`;
+
+const SummaryText = styled.span`
+  height: 28px;
+  font-family: PretendardVariable;
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.67;
+  letter-spacing: normal;
+  text-align: left;
+  color: #333;
+`;
+
 const ChartContainer = styled.section`
   display: flex;
   flex-wrap: wrap;
@@ -427,24 +450,31 @@ function CheckupReport() {
         {week === 4 ||
           (week === 3 && (
             <>
-              <h3>📆 월간 그래프</h3>
-              <P>
-                지난달 나의 마음 건강 점수는 {myScore}점으로 우리 회사 평균{" "}
-                {companyScore}점 대비{" "}
-                {parseFloat((myScore - companyScore).toFixed(1))}점{" "}
-                {myScore > companyScore ? "높게" : "낮게"} 나타났습니다. (100점
-                만점 환산) 나의 마음 건강이 전반적으로 균형감 있게 튼튼한지,
-                어떤 부분이 강하고 약하게 나타나는지 살펴보세요.
-              </P>
+              <SectionSubTitle>📆 월간 그래프</SectionSubTitle>
+              <SectionIntro>
+                나의 마음 건강 점수는{" "}
+                <b style={{ fontWeight: "bold" }}>
+                  {myScore}점으로 우리 회사 평균 {companyScore}점 대비{" "}
+                  {parseFloat((myScore - companyScore).toFixed(1))}점{" "}
+                  {myScore > companyScore ? "높게" : "낮게"} 나타났습니다.
+                </b>{" "}
+                (100점 만점 환산) 나의 마음 건강이 전반적으로 균형감 있게
+                튼튼한지, 어떤 부분이 강하고 약하게 나타나는지 살펴보세요.
+              </SectionIntro>
               <RadarChart
                 companyAverage={companyAverage}
                 myAverage={myAverage}
               />
-              <P>
-                7월 나의 마음 건강 평균 : 긍정정서 {myAverage[0]}, 몰입{" "}
-                {myAverage[1]}, 관계 {myAverage[2]}, 의미 {myAverage[3]}, 성취{" "}
-                {myAverage[4]}, 활력 {myAverage[5]}
-              </P>
+              <SummaryBox>
+                <SummaryText>
+                  <b style={{ fontWeight: "600", letterSpacing: "-0.54px" }}>
+                    💡 나의 마음 건강 평균
+                  </b>{" "}
+                  : 긍정정서 {myAverage[0]}, 몰입 {myAverage[1]}, 관계{" "}
+                  {myAverage[2]}, 의미 {myAverage[3]}, 성취 {myAverage[4]}, 활력{" "}
+                  {myAverage[5]}
+                </SummaryText>
+              </SummaryBox>
             </>
           ))}
 

@@ -10,6 +10,14 @@ import {
 } from "chart.js";
 import { Radar } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import styled from "styled-components";
+
+const Container = styled.div`
+  width: 708px;
+  height: 465px;
+  margin-top: 50px;
+  margin-bottom: 30px;
+`;
 
 ChartJS.register(
   RadialLinearScale,
@@ -22,7 +30,8 @@ ChartJS.register(
 );
 
 const options = {
-  // maintainAspectRatio: false,
+  responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       position: "bottom",
@@ -87,5 +96,10 @@ export function RadarChart({ companyAverage, myAverage }) {
       },
     ],
   };
-  return <Radar data={data} options={options} width={200} height={100} />;
+  return (
+    <Container>
+      {" "}
+      <Radar data={data} options={options} />
+    </Container>
+  );
 }
