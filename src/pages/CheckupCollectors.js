@@ -6,6 +6,7 @@ import {
   getMaumCheckupNameWithResponses,
   loadResponsesFromDB,
   saveResponsesToDB,
+  updateMailchimpStatus,
 } from "../api";
 import FlexRow from "../components/FlexRow";
 import Loading from "../components/Loading";
@@ -171,15 +172,11 @@ function CheckupCollectors() {
 
   const handleSendReportClick = async (collectorId, index) => {
     setIsLoading(true);
-    const response = await axios.post(
-      `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/email`,
-      JSON.stringify({
-        week: index + 1,
-        data: Object.keys(checkupCollectorResponses[index]),
-      }),
-      {
-        headers: { "Content-Type": "Application/json" },
-      }
+    const emails = Object.keys(checkupCollectorResponses[index]);
+    const response = await updateMailchimpStatus(
+      checkupCollectorResponses,
+      index,
+      emails
     );
     setIsLoading(false);
     console.log("Send Report");

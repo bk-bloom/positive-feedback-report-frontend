@@ -360,3 +360,34 @@ export const loadResponsesFromDB = async () => {
 
   return response.data;
 };
+
+export const updateMailchimpStatus = async (
+  checkupCollectorResponses,
+  index,
+  emails
+) => {
+  const emailResponse = await axios.post(
+    `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/email`,
+    JSON.stringify({
+      week: index + 1,
+      data: Object.keys(checkupCollectorResponses[index]),
+    }),
+    {
+      headers: { "Content-Type": "Application/json" },
+    }
+  );
+  console.log(emailResponse);
+
+  addMemberTagInMailchimp(emails, index);
+};
+
+const addMemberTagInMailchimp = async (emails, index) => {
+  const response = await axios.post(
+    `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/tag`,
+    {
+      emails: emails,
+      week: index + 1,
+    }
+  );
+  return response.data;
+};

@@ -238,6 +238,8 @@ function CheckupReport() {
           ))}
         </Item>
       </List> */}
+        <p>데이터 수집일: </p>
+        <p>데이터 생성일: </p>
         {week < 3 ? (
           <>
             <P>
