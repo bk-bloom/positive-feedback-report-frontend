@@ -243,6 +243,13 @@ const ColorSpan = styled.span`
   letter-spacing: normal;
 `;
 
+const createdAt = [
+  { collectedAt: "2022.8.22(월)", createdAt: "2022.8.23(화)" },
+  { collectedAt: "2022.8.29(월)", createdAt: "2022.8.30(화)" },
+  { collectedAt: "2022.9.5(월)", createdAt: "2022.9.6(화)" },
+  { collectedAt: "2022.9.12(월)", createdAt: "2022.9.13(화)" },
+];
+
 function CheckupReport() {
   const {
     state: { name, week, result },
@@ -379,13 +386,13 @@ function CheckupReport() {
           <MetaDataText>
             데이터 수집일:{" "}
             <MetaDataText style={{ letterSpacing: "normal" }}>
-              2주전
+              {createdAt[week].collectedAt}
             </MetaDataText>
           </MetaDataText>
           <MetaDataText>
             데이터 생성일:{" "}
             <MetaDataText style={{ letterSpacing: "normal" }}>
-              2021.8.24(화)
+              {createdAt[week].createdAt}
             </MetaDataText>
           </MetaDataText>
         </MetaDataContainer>
