@@ -15,32 +15,32 @@ const permav = [
   {
     name: "긍정정서",
     word: "Positive Emotions",
-    color: "#ed2b2b",
+    color: "#ffc842",
   },
   {
     name: "몰입",
     word: "Engagement",
-    color: "#ff812c",
+    color: "#dae233",
   },
   {
     name: "관계",
     word: "Relationships",
-    color: "#ffc842",
+    color: "#ff812c",
   },
   {
     name: "의미",
     word: "Meaning",
-    color: "#dae233",
+    color: "#00c0e0",
   },
   {
     name: "성취",
     word: "Accomplishment",
-    color: "#00c0e0",
+    color: "#b782b9",
   },
   {
     name: "활력",
     word: "Vitality",
-    color: "#7ca1d4",
+    color: "#ed2b2b",
   },
 ];
 
@@ -55,71 +55,192 @@ const Container = styled.div`
 
 const Wrapper = styled.div`
   display: flex;
-  width: 21cm;
+  width: 820px;
   flex-direction: column;
-  padding: 20px;
-  //   border: 1px solid black;
+  padding: 0 50px;
+  // border: 1px solid black;
 `;
 
-const Title = styled.h1``;
+const Title = styled.h1`
+  height: 42px;
+  margin: 70px 0 25.5px 0;
+  font-family: PretendardVariable;
+  font-size: 36px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.78;
+  letter-spacing: -1.08px;
+  text-align: left;
+  color: #000;
+`;
+
+const TitleDivider = styled.div`
+  width: 720px;
+  height: 0;
+  margin: 0 0 25.5px 0.5px;
+  border-top: solid 2px #010101;
+`;
+
+const MetaDataContainer = styled.div`
+  margin: 0 0 78px 0;
+  display: flex;
+  flex-direction: column;
+`;
+
+const MetaDataText = styled.span`
+  font-family: PretendardVariable;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.88;
+  letter-spacing: -0.48px;
+  text-align: left;
+  color: #777;
+`;
+
+const IntroText = styled.p`
+  width: 625px;
+  height: 141px;
+  margin: 0 97.5px 95px 0;
+  font-family: PretendardVariable;
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.67;
+  letter-spacing: -0.54px;
+  text-align: left;
+  color: #000;
+`;
 
 const SectionTitle = styled.h2`
-  margin-top: 2rem;
-  margin-bottom: 0;
+  width: 282px;
+  height: 40px;
+  font-family: PretendardVariable;
+  font-size: 30px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: -0.9px;
+  text-align: left;
+  color: #010101;
 `;
 
-const List = styled.div`
+const SectionTitleDivider = styled.div`
+  width: 720px;
+  height: 0;
+  margin: 14.5px 0 42.5px 7.5px;
+  border-top: solid 1px #777;
+`;
+
+const SectionSubTitle = styled.h3`
+  width: 152px;
+  height: 32px;
+  margin: 0 0 33px 1px;
+  font-family: PretendardVariable;
+  font-size: 24px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.25;
+  letter-spacing: -0.72px;
+  color: #010101;
+`;
+
+const SectionIntro = styled.p`
+  width: 720px;
+  height: 59px;
+  font-family: PretendardVariable;
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.67;
+  letter-spacing: -0.54px;
+  color: #333;
+  margin-bottom: 5px;
+`;
+
+const Banner = styled.div`
+  width: 820px;
+  height: 200px;
+  padding: 20.8px 0 0 107.6px;
+  background-color: #fff2d4;
   display: flex;
-  flex-direction: column;
-  width: 100%;
 `;
 
-const Item = styled.div`
-  width: 100%;
-  height: 60px;
-  border: 1px solid black;
-  cursor: pointer;
-  display: flex;
+const BannerImage = styled.img`
+  width: 198.9px;
+  height: 179.2px;
+  margin: 0 43.5px 0 0;
+  object-fit: contain;
 `;
 
-const Column = styled.div`
-  flex: 1;
-  &:nth-child(8),
-  &:nth-child(9) {
-    flex: 3;
-  }
+const BannerTitle = styled.h1`
+  height: 58px;
+  margin: 54.2px 0 67px 43.5px;
+  font-family: EliceDigitalBaeumOTF;
+  font-size: 31px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.77;
+  letter-spacing: -1.24px;
+  text-align: left;
+  color: #010101;
 `;
-
-const Banner = styled.img`
-  width: 100%;
-`;
-
 const ChartContainer = styled.section`
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 3rem;
+  margin-top: 60px;
 `;
 
 const ChartItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin: 10px 30px 10px 10px;
-  //   border: 1px solid black;
+  margin-bottom: 60px;
+  &:nth-child(even) {
+    margin-left: 30px;
+  }
+  // border: 1px solid black;
+`;
+
+const ChartTitle = styled.div`
+  display: flex;
+  margin-bottom: 24px;
+  margin-left: 6px;
+  align-items: flex-end;
 `;
 
 const P = styled.p`
   line-height: 2;
 `;
 
-const Span = styled.span`
-  font-size: 1.1rem;
-  font-weight: bold;
+const ChartSpan = styled.span`
+  height: 24px;
+  margin: 0 7px 0 0;
+  font-family: PretendardVariable;
+  font-size: 20px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  // line-height: 1.5;
+  letter-spacing: -0.6px;
+  color: #010101;
 `;
 
 const ColorSpan = styled.span`
-  font-size: 0.8rem;
-  margin-left: 0.5rem;
+  height: 16px;
+  font-family: PretendardVariable;
+  font-size: 14px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
 `;
 
 function CheckupReport() {
@@ -200,7 +321,6 @@ function CheckupReport() {
 
     let index = week;
     if (interventions[category].length <= week) {
-      console.log("hi");
       index = interventions[category].length % week;
     }
     // console.log(category, index, interventions[category][index]);
@@ -224,13 +344,30 @@ function CheckupReport() {
 
   return (
     <Container>
+      <Banner>
+        <BannerImage
+          src={`${process.env.PUBLIC_URL}/assets/checkup-banner3x.png`}
+        />
+        <BannerTitle>
+          직장인 마음 피트니스,{" "}
+          <b
+            style={{
+              fontWeight: "bold",
+              fontSize: "40px",
+              letterSpacing: "-1.6px",
+            }}
+          >
+            맘핏
+          </b>
+        </BannerTitle>
+      </Banner>
       <Wrapper>
-        <Banner src="/assets/banner.png" />
         <Title>
           {week < 4
-            ? `${name}님의 ${week + 1}주차 마음 체크업 리포트입니다`
+            ? `${name} 님의 ${week + 1}주차 체크업 리포트`
             : `${name}님의 월간 마음 체크업 리포트입니다`}
         </Title>
+        <TitleDivider />
         {/* <List>
         <Item>
           {result.map((answer, index) => (
@@ -238,23 +375,36 @@ function CheckupReport() {
           ))}
         </Item>
       </List> */}
-        <p>데이터 수집일: </p>
-        <p>데이터 생성일: </p>
+        <MetaDataContainer>
+          <MetaDataText>
+            데이터 수집일:{" "}
+            <MetaDataText style={{ letterSpacing: "normal" }}>
+              2주전
+            </MetaDataText>
+          </MetaDataText>
+          <MetaDataText>
+            데이터 생성일:{" "}
+            <MetaDataText style={{ letterSpacing: "normal" }}>
+              2021.8.24(화)
+            </MetaDataText>
+          </MetaDataText>
+        </MetaDataContainer>
         {week < 3 ? (
-          <>
-            <P>
-              '지난 주 나는 어떤 마음으로 일했더라?' <br />
-              한주 간의 마음 체크업에 대한 결과를 정리해 드립니다. <br />
-              <br />
-              건강한 몸을 만들기 위해 인바디로 내 몸의상태를 알고 반복적인 근력
-              운동을 하는 것처럼
-              <br />
-              건강한 마음도 주기적으로 내 마음을 들여다보고, 꾸준한 마음
-              루틴으로 만들어질 수 있습니다.
-            </P>
-          </>
+          <IntroText>
+            <b style={{ fontWeight: "600" }}>
+              '지난 주 나는 어떤 마음으로 일했더라?'
+            </b>{" "}
+            <br />
+            한주 간의 마음 체크업에 대한 결과를 정리해 드립니다. <br />
+            <br />
+            건강한 몸을 만들기 위해 인바디로 내 몸의상태를 알고 반복적인 근력
+            운동을 하는 것처럼
+            <br />
+            건강한 마음도 주기적으로 내 마음을 들여다보고, 꾸준한 마음 루틴으로
+            만들어질 수 있습니다.
+          </IntroText>
         ) : (
-          <P>
+          <IntroText>
             와우! 벌써 새로운 달이 시작되었네요. 지난 한 달 어떠셨나요?
             <br />
             일터에서 즐겁고 의미있게, 몰입하며 일했나요? <br />
@@ -262,11 +412,11 @@ function CheckupReport() {
             뭔가 바쁘게는 일한 거 같은데, 어떻게 지냈는지는 잘 기억이 안 나실 것
             같아 <b>월간 그래프</b>를 특별히 준비했습니다. <br />
             주기적으로 내 마음을 들여다보며 마음 건강을 챙겨보세요
-          </P>
+          </IntroText>
         )}
 
         <SectionTitle>💡지난 마음 체크업 결과</SectionTitle>
-        <hr style={{ width: "100%" }} />
+        <SectionTitleDivider />
         {week === 4 ||
           (week === 3 && (
             <>
@@ -291,21 +441,21 @@ function CheckupReport() {
             </>
           ))}
 
-        <h3>📈 주간 그래프</h3>
-        <P>
+        <SectionSubTitle>📈 주간 그래프</SectionSubTitle>
+        <SectionIntro>
           지난 주와 비교해서 높게 나타나는 영역은 무엇인가요? '내가 잘 챙기고
           있네!' 라며 스스로를 칭찬해 주세요! 낮게 나타나는 영역은 무엇인가요?
           어떻게 하면 더 나아질 수 있을지 의도적인 행동으로 챙겨보세요.
-        </P>
+        </SectionIntro>
         <WeeklyChart result={result} week={week} />
 
         <ChartContainer>
           {permav.map((item, index) => (
             <ChartItem key={index}>
-              <div>
-                <Span>{item.name}</Span>
+              <ChartTitle>
+                <ChartSpan>{item.name}</ChartSpan>
                 <ColorSpan style={{ color: item.color }}>{item.word}</ColorSpan>
-              </div>
+              </ChartTitle>
               <Chart
                 result={extractColumn(index + 2)}
                 week={week}

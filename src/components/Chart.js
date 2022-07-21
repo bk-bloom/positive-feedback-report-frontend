@@ -35,11 +35,8 @@ ChartJS.register(
 // });
 
 const Container = styled.div`
-  //   height: 200px;
-  // width: 500px;
-  width: 350px;
-  // padding: 10px;
-  // border: 1px solid black;
+  width: 343px;
+  height: 213px;
 `;
 
 export const options = {
@@ -97,7 +94,7 @@ export const options = {
       max: 10,
       ticks: {
         stepSize: 2,
-        padding: 20,
+        padding: 10,
         color: "black",
       },
       grid: {

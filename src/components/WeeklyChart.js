@@ -25,10 +25,8 @@ ChartJS.register(
 );
 
 const Container = styled.div`
-  //   height: 200px;
-  // width: 500px;
-  width: 600px;
-  padding: 40px;
+  height: 451px;
+  // padding: 10px;
   // border: 1px solid black;
 `;
 
@@ -36,7 +34,7 @@ export const options = {
   // responsive: true,
   maintainAspectRatio: false,
   layout: {
-    padding: 20,
+    // padding: 20,
   },
   plugins: {
     legend: {
@@ -98,33 +96,6 @@ export const options = {
   },
 };
 
-// const labels = ["긍정정서", "몰입", "관계", "의미", "성취", "활력"];
-
-// export const data = {
-//   labels,
-//   datasets: [
-//     {
-//       label: "지난 주",
-//       data: [10, 10, 8, 8, 9, 10],
-//       borderDash: [5, 5],
-//       borderColor: "rgb(255, 99, 132)",
-//       backgroundColor: "rgb(255, 99, 132)",
-//       borderWidth: 2,
-//       datalabels: {
-//         align: "start",
-//         anchor: "start",
-//       },
-//     },
-//     {
-//       label: "이번 주",
-//       data: [10, 10, 1, 10, 10, 10],
-//       borderColor: "rgb(53, 162, 235)",
-//       backgroundColor: "rgb(53, 162, 235)",
-//       borderWidth: 2,
-//     },
-//   ],
-// };
-
 export function WeeklyChart({ result, week }) {
   // console.log("Weekly Chart => ", result, week);
   const countRef = useRef(0);
@@ -134,16 +105,16 @@ export function WeeklyChart({ result, week }) {
       {
         label: "이번 주",
         data: result[week === 4 ? 3 : week].slice(2, 8),
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgb(53, 162, 235)",
+        borderColor: "#00c0e0",
+        backgroundColor: "#00c0e0",
         borderWidth: 2,
       },
       {
         label: "지난 주",
         data: week === 0 ? [] : result[week === 4 ? 2 : week - 1].slice(2, 8),
         borderDash: [5, 5],
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgb(255, 99, 132)",
+        borderColor: "#ffc842",
+        backgroundColor: "#ffc842",
         borderWidth: 2,
         // datalabels: {
         //   align: "start",
@@ -152,38 +123,10 @@ export function WeeklyChart({ result, week }) {
       },
     ],
   });
-  useEffect(() => {
-    // if (week === 0) {
-    //   const obj = {
-    //     ...data,
-    //     datasets: [data.datasets[0]],
-    //   };
-    //   obj.datasets[0].data = result[0].slice(2, 8);
-    //   setData(obj);
-    // }
-    // else if (week === 4) {
-    //   const obj = {
-    //     ...data,
-    //   };
-    //   obj.datasets[0].data = result[week].slice(2, 8);
-    //   obj.datasets[1].data = result[week - 1].slice(2, 8);
-    //   console.log(obj);
-    //   setData(obj);
-    // }
-    // else {
-    //   const obj = {
-    //     ...data,
-    //   };
-    //   obj.datasets[0].data = result[week].slice(2, 8);
-    //   obj.datasets[1].data = result[week - 1].slice(2, 8);
-    //   console.log(obj);
-    //   setData(obj);
-    // }
-    // setData();
-  }, []);
+  useEffect(() => {}, []);
   return (
     <Container>
-      <Line options={options} data={data} height={400} />
+      <Line options={options} data={data} height={450} />
     </Container>
   );
 }

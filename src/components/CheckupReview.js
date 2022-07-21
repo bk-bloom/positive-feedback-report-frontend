@@ -1,24 +1,44 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-  margin-bottom: 4rem;
+  margin-bottom: 78px;
 `;
 
-const Title = styled.h3`
-  font-size: 1.3rem;
+const SectionSubTitle = styled.h3`
+  height: 32px;
+  margin: 0 0 24px 1px;
+  font-family: PretendardVariable;
+  font-size: 24px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.25;
+  letter-spacing: -0.72px;
+  text-align: left;
+  color: #010101;
 `;
-
 const Box = styled.div`
-  background: rgba(200, 200, 200, 0.2);
-  padding: 1rem;
+  // height: 59px;
+  display: flex;
+  align-items: center;
+  margin: 24px 0 0;
+  padding: 20px;
+  background-color: #f8f8f8;
 `;
 const P = styled.p`
-  margin: 0;
+  height: 21px;
+  font-family: PretendardVariable;
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: -0.54px;
+  color: #333;
 `;
 function CheckupReview({ review }) {
   return (
     <Container>
-      <Title>✏️ 지난 주에 남긴 기록</Title>
+      <SectionSubTitle>✏️ 지난 주에 남긴 기록</SectionSubTitle>
       <Box>
         <P>{review}</P>
       </Box>
