@@ -15,7 +15,7 @@ const SectionSubTitle = styled.h3`
   color: #010101;
 `;
 const P = styled.p`
-  margin: 0 0 24px;
+  margin: 0 10px 28px;
   font-family: PretendardVariable;
   font-size: 18px;
   font-weight: normal;
@@ -28,45 +28,76 @@ const P = styled.p`
 
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 230px);
-  gap: 15px;
-  margin-top: 2rem;
+  grid-template-columns: repeat(3, 190px);
+  gap: 66px;
 `;
 
 const GridItem = styled.div`
-  padding: 20px 0 21px 16px;
-  background-color: #f8f8f8;
-  height: 140px;
+  /* padding: 20px 0 21px 16px; */
+  /* background-color: #f8f8f8; */
+  height: 160px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+  /* border: 1px solid black; */
+`;
+
+const GridIcon = styled.img`
+  width: 67px;
+  height: 67px;
+  margin: 0 7px 15px 0;
+  object-fit: contain;
 `;
 
 const GridText = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 0 19px;
+  height: 43px;
+  /* margin: 0 29px 0 0; */
   font-family: PretendardVariable;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
-  line-height: 1.5;
-  letter-spacing: -0.48px;
+  line-height: 1.35;
+  letter-spacing: -0.51px;
   text-align: left;
   color: #333;
 `;
 
+const GridWordBox = styled.div`
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 11px;
+`;
 const GridWord = styled.span`
+  /* width: 67px; */
+  /* height: 24px; */
+  /* margin: 0 7px 11px 0; */
+  margin-right: 7px;
   font-family: PretendardVariable;
-  font-size: 11px;
-  font-weight: normal;
+  font-size: 20px;
+  font-weight: bold;
   font-stretch: normal;
   font-style: normal;
-  line-height: 2.73;
+  /* line-height: 1.2; */
+  letter-spacing: -0.6px;
+  text-align: left;
+  color: #333;
+`;
+
+const GridWordHighlight = styled.span`
+  /* width: 106px; */
+  /* height: 15px; */
+  /* margin: 0 0 12px 0; */
+  font-family: PretendardVariable;
+  font-size: 13px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  /* line-height: 2.31; */
   letter-spacing: normal;
   text-align: left;
-  color: #777;
 `;
 
 const Span = styled.span`
@@ -76,20 +107,41 @@ const Span = styled.span`
 function CheckupArea() {
   const data = [
     {
-      text: "일터에서\n회복탄력성을 키우는\n긍정정서",
-      word: "Positive Emotions",
+      icon: `${process.env.PUBLIC_URL}/assets/positive-icon3x.png`,
+      text: "기쁨, 감사, 평온과 같은\n기분 좋은 정서",
+      word: "긍정정서 Positive Emotions",
+      color: "#ffc842",
     },
-    { text: "강점을 발휘하며\n자기효능감을 높이는\n몰입", word: "Engagement" },
     {
-      text: "동료들과 감정, 생각, 비전을\n함께 주고받는\n관계",
-      word: "Relationships",
+      icon: `${process.env.PUBLIC_URL}/assets/engagement-icon3x.png`,
+      text: "어떤 활동에 푹 빠져서\n시간 가는 줄 모르는 경험",
+      word: "몰입 Engagement",
+      color: "#dae233",
     },
-    { text: "일에 의미와 가치를\n실현해 나가는\n의미", word: "Meaning" },
     {
-      text: "목표를 달성하며\n동기부여를 촉진하는\n성취",
-      word: "Accomplishment",
+      icon: `${process.env.PUBLIC_URL}/assets/relationship-icon3x.png`,
+      text: "마음을 주고받을 수 있는\n사람들과 연결되어 있는 상태",
+      word: "관계 Relationships",
+      color: "#ff812c",
     },
-    { text: "건강한 에너지를\n유지하는\n활력", word: "Vitality" },
+    {
+      icon: `${process.env.PUBLIC_URL}/assets/meaning-icon3x.png`,
+      text: "삶의 목적을 알고\n그것을 추구하는 것",
+      word: "의미 Meaning",
+      color: "#00c0e0",
+    },
+    {
+      icon: `${process.env.PUBLIC_URL}/assets/accomplishment-icon3x.png`,
+      text: "목표를 위해 노력하고\n그 자체에 즐거움을 느끼는 것",
+      word: "성취 Accomplishment",
+      color: "#b782b9",
+    },
+    {
+      icon: `${process.env.PUBLIC_URL}/assets/vitality-icon3x.png`,
+      text: "건강한 몸과 마음을\n잘 돌보는 것",
+      word: "활력 Vitality",
+      color: "#ed2b2b",
+    },
   ];
   return (
     <Container>
@@ -103,22 +155,18 @@ function CheckupArea() {
       <GridContainer>
         {data.map((item, index) => (
           <GridItem key={index}>
+            <GridIcon src={item.icon} />
+            <GridWordBox>
+              <GridWord>{item.word.split(" ")[0]}</GridWord>
+              <GridWordHighlight style={{ color: item.color }}>
+                {item.word.split(" ").slice(1).join(" ")}
+              </GridWordHighlight>
+            </GridWordBox>
             <GridText>
               {item.text.split("\n").map((s, index) => {
-                if (index === 2) {
-                  return (
-                    <Span key={index}>
-                      <b style={{ fontWeight: "bold" }}>{s}</b>
-                    </Span>
-                  );
-                }
                 return <Span key={index}>{s}</Span>;
               })}
             </GridText>
-            <GridWord>
-              <b style={{ fontWeight: "600" }}>{item.word[0]}</b>
-              {item.word.slice(1)}
-            </GridWord>
           </GridItem>
         ))}
       </GridContainer>

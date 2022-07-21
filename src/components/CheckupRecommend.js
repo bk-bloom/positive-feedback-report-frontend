@@ -1,15 +1,8 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
-import FlexColumn from "./FlexColumn";
-import FlexRow from "./FlexRow";
 
 const Container = styled.section`
-  margin-top: 100px;
+  margin-top: 111px;
   margin-bottom: 100px;
-`;
-
-const Div = styled.div`
-  display: flex;
 `;
 
 const SectionTitle = styled.h2`
