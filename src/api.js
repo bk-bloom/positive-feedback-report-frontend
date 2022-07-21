@@ -179,7 +179,7 @@ export const getCollectorsBySurveyId = async (surveyId) => {
       },
     }
   );
-  console.log(response.data);
+  // console.log(response.data);
 
   return response.data.data;
 };
@@ -298,7 +298,7 @@ export const getMaumCheckupNameWithResponses = async (collectorIds) => {
           for (let k = 0; k < questions.length; k++) {
             answers.push(questions[k].answers[0].text);
           }
-          console.log(answers);
+          // console.log(answers);
           if (dest[email] === undefined) {
             dest[email] = [];
           }
@@ -361,22 +361,18 @@ export const loadResponsesFromDB = async () => {
   return response.data;
 };
 
-export const updateMailchimpStatus = async (
-  checkupCollectorResponses,
-  index,
-  emails
-) => {
+export const updateMailchimpStatus = async (index, emails) => {
   const emailResponse = await axios.post(
     `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/email`,
     JSON.stringify({
       week: index + 1,
-      data: Object.keys(checkupCollectorResponses[index]),
+      data: emails,
     }),
     {
       headers: { "Content-Type": "Application/json" },
     }
   );
-  console.log(emailResponse);
+  // console.log(emailResponse);
 
   addMemberTagInMailchimp(emails, index);
 };

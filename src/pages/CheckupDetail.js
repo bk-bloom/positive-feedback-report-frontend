@@ -19,7 +19,12 @@ const Container = styled.div`
   padding: 0 40px;
 `;
 
-const Title = styled.h1``;
+const Title = styled.h1`
+  font-weight: bold;
+  font-size: 2rem;
+  margin-bottom: 5rem;
+  margin-top: 5rem;
+`;
 
 const List = styled.div`
   display: flex;

@@ -27,7 +27,10 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.h1`
+  font-weight: bold;
+  font-size: 2rem;
   margin-bottom: 5rem;
+  margin-top: 5rem;
 `;
 
 const List = styled.div`
@@ -38,14 +41,20 @@ const List = styled.div`
 `;
 
 const Item = styled.div`
-  width: 150px;
-  height: 150px;
+  width: 180px;
+  height: 180px;
   margin: 10px;
   display: flex;
   padding: 10px;
   flex-direction: column;
   align-items: flex-start;
   box-shadow: 0px 0px 6px -1px rgba(0, 0, 0, 0.3);
+`;
+
+const ItemTitle = styled.span`
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  font-weight: 600;
 `;
 
 const Column = styled.div`
@@ -172,12 +181,19 @@ function CheckupCollectors() {
 
   const handleSendReportClick = async (collectorId, index) => {
     setIsLoading(true);
-    const emails = Object.keys(checkupCollectorResponses[index]);
-    const response = await updateMailchimpStatus(
-      checkupCollectorResponses,
-      index,
-      emails
-    );
+    let emails = [];
+    if (index === 3) {
+      for (let i = 0; i < checkupCollectorResponses.length; i++) {
+        for (const email of Object.keys(checkupCollectorResponses[i])) {
+          if (!emails.includes(email)) {
+            emails.push(email);
+          }
+        }
+      }
+    } else {
+      emails = Object.keys(checkupCollectorResponses[index]);
+    }
+    const response = await updateMailchimpStatus(index, emails);
     setIsLoading(false);
     console.log("Send Report");
   };
@@ -211,10 +227,19 @@ function CheckupCollectors() {
             : collectors.map((collector, index) => (
                 <Item key={collector.id}>
                   <Column>
-                    {index + 1}주차 리포트 (
-                    {checkupCollectorResponses.length !== 0 &&
-                      Object.keys(checkupCollectorResponses[index]).length}
-                    )
+                    <ItemTitle>{index + 1}주차 리포트</ItemTitle>
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.9rem",
+                        color: "#777777",
+                      }}
+                    >
+                      [
+                      {checkupCollectorResponses.length !== 0 &&
+                        Object.keys(checkupCollectorResponses[index]).length}
+                      명 응답]
+                    </span>
                   </Column>
                   <Column>
                     <Button onClick={() => handleClick(collector.id, index)}>
@@ -223,7 +248,7 @@ function CheckupCollectors() {
                     <Button
                       onClick={() => handleSendReportClick(collector.id, index)}
                     >
-                      리포트 전체 예약 발송
+                      리포트 예약 발송
                     </Button>
                   </Column>
                 </Item>
