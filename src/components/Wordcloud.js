@@ -20,7 +20,6 @@ function Wordcloud({ data, type }) {
   list.slice(0, 3).forEach((d) => {
     d[1] *= 7;
   });
-  console.log(list.length);
   useEffect(() => {
     let i = 0;
     WordCloud(divRef.current, {

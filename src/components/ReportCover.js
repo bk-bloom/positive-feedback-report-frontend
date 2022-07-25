@@ -159,7 +159,7 @@ function ReportCover({ name }) {
         <SubTitle>
           두산공작기계 차장승진자를 위한
           <br />
-          <b style={{ "font-weight": "500" }}>갈등관리 리더십 과정</b>
+          <b style={{ fontWeight: "500" }}>갈등관리 리더십 과정</b>
         </SubTitle>
         <Border />
 

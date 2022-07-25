@@ -172,7 +172,7 @@ const WordContainer = styled.div`
   // width: 100%;
   display: inline;
   height: 16px;
-  align-items: center;
+  line-height: 14px;
   margin-right: 10px;
   margin-bottom: 5px;
   // border: 1px solid black;
@@ -186,20 +186,21 @@ const Word = styled.span`
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
-  line-height: 1.86;
   letter-spacing: -0.42px;
   text-align: left;
   color: #000;
   // border: 1px solid black;
 `;
 
-const WordCount = styled.span`
+const WordCount = styled.div`
   width: 16px;
-  height: 12px;
+  height: 16px;
   font-size: 10px;
-  padding: 0 3px;
   border-radius: 3px;
   border: solid 1px #707070;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
 `;
 
 const CommentContainer = styled.div`
@@ -370,8 +371,8 @@ function Report() {
                       <AllWordsBorder />
                       <SectionAllWords>
                         {reportData[0].map((word, index) => (
-                          <WordContainer>
-                            <Word key={index}>{word[0]}</Word>{" "}
+                          <WordContainer key={index}>
+                            <Word>{word[0]}</Word>{" "}
                             <WordCount>{word[1]}</WordCount>
                           </WordContainer>
                         ))}
@@ -395,8 +396,8 @@ function Report() {
                       <SectionSubTitle>가치 단어 모음</SectionSubTitle>
                       <SectionAllWords>
                         {reportData[1].map((word, index) => (
-                          <WordContainer>
-                            <Word key={index}>{word[0]}</Word>{" "}
+                          <WordContainer key={index}>
+                            <Word>{word[0]}</Word>{" "}
                             <WordCount>{word[1]}</WordCount>
                           </WordContainer>
                         ))}
@@ -423,12 +424,10 @@ function Report() {
                   </SectionHeader>
                   <CommentSectionList>
                     {reportData[2].map((comment, index) => (
-                      <>
-                        <CommentSectionItem key={index}>
-                          {comment}
-                        </CommentSectionItem>
+                      <div key={index}>
+                        <CommentSectionItem>{comment}</CommentSectionItem>
                         <CommentDivider />
-                      </>
+                      </div>
                     ))}
                   </CommentSectionList>
                 </CommentSection>
@@ -438,12 +437,10 @@ function Report() {
                   </SectionHeader>
                   <CommentSectionList>
                     {reportData[3].map((comment, index) => (
-                      <>
-                        <CommentSectionItem key={index}>
-                          {comment}
-                        </CommentSectionItem>
+                      <div key={index}>
+                        <CommentSectionItem>{comment}</CommentSectionItem>
                         <CommentDivider />
-                      </>
+                      </div>
                     ))}
                   </CommentSectionList>
                 </CommentSection>
