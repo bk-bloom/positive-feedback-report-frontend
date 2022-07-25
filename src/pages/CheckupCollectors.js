@@ -85,7 +85,7 @@ const Button = styled.button`
 function CheckupCollectors() {
   const { projectId } = useParams();
   const {
-    state: { collectors, projectTitle },
+    state: { collectors, projectTitle, projectSendReportDates },
   } = useLocation();
   const navigate = useNavigate();
 
@@ -101,10 +101,7 @@ function CheckupCollectors() {
     setIsLoading(true);
     // Get Data from SurveyMonkey
     // const data = []; // [{email: [1주차 답변], email2: [1주차 답변]}, {2주차 답변}, {3주차 답변}, {4주차 답변}]
-    const data = await getMaumCheckupNameWithResponses(
-      collectors.map((collector) => collector.id)
-    );
-    console.log(data);
+    const data = await getMaumCheckupNameWithResponses(collectors);
 
     // Save To DB
     const response = await saveResponsesToDB(data, projectId);
@@ -180,24 +177,28 @@ function CheckupCollectors() {
   };
 
   const handleSendReportClick = async (collectorId, index) => {
-    setIsLoading(true);
-    let emails = [];
-    if (index === 3) {
-      for (let i = 0; i < checkupCollectorResponses.length; i++) {
-        for (const email of Object.keys(checkupCollectorResponses[i])) {
-          if (!emails.includes(email)) {
-            emails.push(email);
-          }
-        }
-      }
-    } else {
-      emails = Object.keys(checkupCollectorResponses[index]);
-    }
-    const response = await updateMailchimpStatus(index, emails);
+    //   setIsLoading(true);
+    //   let emails = [];
+    //   if (index === 3) {
+    //     for (let i = 0; i < checkupCollectorResponses.length; i++) {
+    //       for (const email of Object.keys(checkupCollectorResponses[i])) {
+    //         if (!emails.includes(email)) {
+    //           emails.push(email);
+    //         }
+    //       }
+    //     }
+    //   } else {
+    //     emails = Object.keys(checkupCollectorResponses[index]);
+    //   }
+    //   const response = await updateMailchimpStatus(index, emails);
     setIsLoading(false);
-    console.log("Send Report");
+    console.log(
+      `Send Report at, ${new Date(
+        projectSendReportDates[index]
+      ).toLocaleString()}`
+    );
   };
-  // console.log("Checkup Detail => ", checkupResponse);
+  console.log(checkupCollectorResponses);
   return (
     <Container>
       <Wrapper>
@@ -225,7 +226,7 @@ function CheckupCollectors() {
           {collectors.length < 1
             ? "데이터가 없습니다"
             : collectors.map((collector, index) => (
-                <Item key={collector.id}>
+                <Item key={collector}>
                   <Column>
                     <ItemTitle>{index + 1}주차 리포트</ItemTitle>
                     <span
@@ -242,11 +243,11 @@ function CheckupCollectors() {
                     </span>
                   </Column>
                   <Column>
-                    <Button onClick={() => handleClick(collector.id, index)}>
+                    <Button onClick={() => handleClick(collector, index)}>
                       상세보기
                     </Button>
                     <Button
-                      onClick={() => handleSendReportClick(collector.id, index)}
+                      onClick={() => handleSendReportClick(collector, index)}
                     >
                       리포트 예약 발송
                     </Button>

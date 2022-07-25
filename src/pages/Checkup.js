@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { getCollectorsBySurveyId, getProjectsBySurveyId } from "../api";
+import {
+  getCollectorsBySurveyId,
+  getProjectsBySurveyId,
+  getProjectsFromDB,
+} from "../api";
 import FlexColumn from "../components/FlexColumn";
 import FlexRow from "../components/FlexRow";
 import HeadSection from "../components/HeadSection";
@@ -69,7 +73,7 @@ function Checkup() {
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
-      const data = await getProjectsBySurveyId("400662208");
+      const data = await getProjectsFromDB();
       setProjectList(data);
       setIsLoading(false);
     }
@@ -77,8 +81,15 @@ function Checkup() {
     fetchData();
   }, []);
 
-  const handleClick = (projectId, collectors, projectTitle) => {
-    navigate(projectId, { state: { collectors, projectTitle } });
+  const handleClick = (
+    projectId,
+    collectors,
+    projectTitle,
+    projectSendReportDates
+  ) => {
+    navigate(projectId, {
+      state: { collectors, projectTitle, projectSendReportDates },
+    });
   };
   return (
     <Container>
@@ -90,15 +101,20 @@ function Checkup() {
               <Item
                 key={project.id}
                 onClick={() =>
-                  handleClick(project.id, project.collectors, project.title)
+                  handleClick(
+                    project.id,
+                    project.collectors,
+                    project.name,
+                    project.sendReportDates
+                  )
                 }
               >
                 <FlexColumn>
                   <SmallText fontWeight="bold">{project.id}</SmallText>
-                  <MediumText>{project.title}</MediumText>
+                  <MediumText>{project.name}</MediumText>
                 </FlexColumn>
                 <div>
-                  <SmallText>기간: {project.duration}</SmallText>
+                  {/* <SmallText>기간: {project.duration}</SmallText> */}
                 </div>
               </Item>
             ))}

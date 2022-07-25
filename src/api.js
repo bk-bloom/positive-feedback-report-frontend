@@ -387,3 +387,11 @@ const addMemberTagInMailchimp = async (emails, index) => {
   );
   return response.data;
 };
+
+export const getProjectsFromDB = async () => {
+  const response = await axios.get(
+    `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/projects`
+  );
+  console.log(response.data);
+  return response.data;
+};
