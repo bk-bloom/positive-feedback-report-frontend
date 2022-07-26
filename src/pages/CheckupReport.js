@@ -280,13 +280,14 @@ function CheckupReport() {
   } = useLocation();
   const { projectId } = useParams();
 
-  // console.log("Checkup Report State =>", useLocation().state);
+  console.log("Checkup Report State =>", useLocation().state);
 
   const [companyAverage, setCompanyAverage] = useState(0);
   const [myAverage, setMyAverage] = useState(0);
   const [myScore, setMyScore] = useState([]);
   const [companyScore, setCompanyScore] = useState([]);
   const [intervention, setIntervention] = useState();
+  const [sendDate, setSendDate] = useState();
 
   const extractColumn = (index) => {
     const dest = [];
@@ -336,6 +337,18 @@ function CheckupReport() {
     setIntervention(getRecommendIntervention(result[week].answers.slice(2, 8)));
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/projects?id=${projectId}`
+      );
+      const date = response.data[0].sendReportDates[week];
+      setSendDate(`${new Date(date).toLocaleDateString()} (${getDay(date)})`);
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <Container>
       <Banner>
@@ -380,13 +393,13 @@ function CheckupReport() {
               {`${new Date(
                 result[result.length - 1].createdAt
               ).toLocaleDateString()}` +
-                `(${getDay(result[result.length - 1].createdAt)})`}
+                ` (${getDay(result[result.length - 1].createdAt)})`}
             </MetaDataText>
           </MetaDataText>
           <MetaDataText>
             데이터 생성일:{" "}
             <MetaDataText style={{ letterSpacing: "normal" }}>
-              {createdAt[week].createdAt}
+              {sendDate}
             </MetaDataText>
           </MetaDataText>
         </MetaDataContainer>
