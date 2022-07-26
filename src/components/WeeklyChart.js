@@ -96,22 +96,24 @@ export const options = {
   },
 };
 
-export function WeeklyChart({ result, week }) {
-  // console.log("Weekly Chart => ", result, week);
+export function WeeklyChart({ results, week }) {
+  // console.log("Weekly Chart => ", results, week);
   const countRef = useRef(0);
   const [data, setData] = useState({
     labels: ["긍정정서", "몰입", "관계", "의미", "성취", "활력"],
     datasets: [
       {
         label: "이번 주",
-        data: result[week === 4 ? 3 : week].slice(2, 8),
+        data:
+          results[week === 0 ? 0 : 1] &&
+          results[week === 0 ? 0 : 1].answers.slice(2, 8),
         borderColor: "#00c0e0",
         backgroundColor: "#00c0e0",
         borderWidth: 2,
       },
       {
         label: "지난 주",
-        data: week === 0 ? [] : result[week === 4 ? 2 : week - 1].slice(2, 8),
+        data: week === 0 ? [] : results[0] && results[0].answers.slice(2, 8),
         borderDash: [5, 5],
         borderColor: "#ffc842",
         backgroundColor: "#ffc842",

@@ -73,7 +73,7 @@ const options = {
     },
   },
 };
-export function RadarChart({ companyAverage, myAverage }) {
+export function RadarChart({ companyScore, myScore }) {
   //   console.log("Radar Chart =>", companyAverage, myAverage);
   const data = {
     labels: ["긍정정서", "몰입", "관계", "의미", "성취", "활력"],
@@ -82,13 +82,13 @@ export function RadarChart({ companyAverage, myAverage }) {
         label: "나의 평균",
         backgroundColor: "rgba(53, 162, 235, 0.2)",
         borderColor: "rgba(53, 162, 235, 1)",
-        data: myAverage,
+        data: myScore,
       },
       {
         label: "우리 회사 평균",
         backgroundColor: "rgba(255, 99, 132, 0.2)",
         borderColor: "rgba(255, 99, 132, 1)",
-        data: companyAverage,
+        data: companyScore,
         datalabels: {
           align: "start",
           anchor: "start",

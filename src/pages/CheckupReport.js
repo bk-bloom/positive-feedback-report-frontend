@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { WeeklyChart } from "../components/WeeklyChart";
 import { RadarChart } from "../components/RadarChart";
@@ -10,6 +10,7 @@ import CheckupRecommend from "../components/CheckupRecommend";
 import CheckupArea from "../components/CheckupArea";
 import CheckupReview from "../components/CheckupReview";
 import CheckupFooter from "../components/CheckupFooter";
+import { getDay } from "../utils";
 
 const permav = [
   {
@@ -275,67 +276,24 @@ const createdAt = [
 
 function CheckupReport() {
   const {
-    state: { name, week, result },
+    state: { email, week, result, prevResult },
   } = useLocation();
+  const { projectId } = useParams();
 
   // console.log("Checkup Report State =>", useLocation().state);
 
-  const [companyAverage, setCompantAverage] = useState([]);
-  const [myAverage, setMyAverage] = useState([]);
-  const [myScore, setMyScore] = useState(0);
-  const [companyScore, setCompanyScore] = useState(0);
+  const [companyAverage, setCompanyAverage] = useState(0);
+  const [myAverage, setMyAverage] = useState(0);
+  const [myScore, setMyScore] = useState([]);
+  const [companyScore, setCompanyScore] = useState([]);
   const [intervention, setIntervention] = useState();
 
-  const calculateAverage = (type, data) => {
-    const temp = [0, 0, 0, 0, 0, 0];
-    let count = 0;
-    if (type === "company") {
-      for (let i = 0; i < data.length; i++) {
-        for (let j = 1; j <= 4; j++) {
-          if (data[i][`week${j}`].length > 0) {
-            for (let k = 2; k <= 7; k++) {
-              temp[k - 2] += Number(data[i][`week${j}`][k]);
-            }
-            count++;
-          }
-        }
-      }
-    } else {
-      for (let i = 0; i < result.length; i++) {
-        if (result[i].length > 0) {
-          for (let j = 2; j <= 7; j++) {
-            temp[j - 2] += Number(result[i][j]);
-          }
-          count++;
-        }
-      }
-    }
-    temp.forEach((n, index, prev) => {
-      prev[index] = parseFloat((n / count).toFixed(1));
-    });
-    if (type === "company") {
-      setCompanyScore(calculateScore(temp));
-    } else {
-      setMyScore(calculateScore(temp));
-    }
-    return temp;
-  };
-
-  const calculateScore = (arr) => {
-    let score = 0;
-    for (let i = 0; i < arr.length; i++) {
-      score += arr[i];
-    }
-
-    return parseFloat((score * 1.665).toFixed(1));
-  };
   const extractColumn = (index) => {
     const dest = [];
     let target = week === 4 ? 3 : week;
     for (let i = 0; i <= target; i++) {
-      dest.push(result[i][index]);
+      dest.push(!result[i] ? null : result[i].answers[index]);
     }
-    // console.log(dest);
     return dest;
   };
 
@@ -359,17 +317,23 @@ function CheckupReport() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(
-        `${process.env.REACT_APP_SERVER_DOMAIN}/checkup?all=true`
+      const allResponse = await axios.get(
+        `${process.env.REACT_APP_SERVER_DOMAIN}/checkup?id=${projectId}`
       );
 
-      setCompantAverage(calculateAverage("company", response.data));
-      setMyAverage(calculateAverage("me"));
+      const myResponse = await axios.get(
+        `${process.env.REACT_APP_SERVER_DOMAIN}/checkup?id=${projectId}&email=${email}`
+      );
+
+      setCompanyAverage(Number(allResponse.data.average));
+      setCompanyScore(allResponse.data.scores);
+      setMyAverage(Number(myResponse.data.average));
+      setMyScore(myResponse.data.scores);
     };
     if (week === 3) {
       fetchData();
     }
-    setIntervention(getRecommendIntervention(result[week].slice(2, 8)));
+    setIntervention(getRecommendIntervention(result[week].answers.slice(2, 8)));
   }, []);
 
   return (
@@ -394,8 +358,12 @@ function CheckupReport() {
       <Wrapper>
         <Title>
           {week < 4
-            ? `${name} 님의 ${week + 1}주차 체크업 리포트`
-            : `${name}님의 월간 마음 체크업 리포트입니다`}
+            ? `${result[result.length - 1].answers[0]} 님의 ${
+                week + 1
+              }주차 체크업 리포트`
+            : `${
+                result[result.length - 1].answers[0]
+              }님의 월간 마음 체크업 리포트입니다`}
         </Title>
         <TitleDivider />
         {/* <List>
@@ -409,7 +377,10 @@ function CheckupReport() {
           <MetaDataText>
             데이터 수집일:{" "}
             <MetaDataText style={{ letterSpacing: "normal" }}>
-              {createdAt[week].collectedAt}
+              {`${new Date(
+                result[result.length - 1].createdAt
+              ).toLocaleDateString()}` +
+                `(${getDay(result[result.length - 1].createdAt)})`}
             </MetaDataText>
           </MetaDataText>
           <MetaDataText>
@@ -454,25 +425,21 @@ function CheckupReport() {
               <SectionIntro>
                 나의 마음 건강 점수는{" "}
                 <b style={{ fontWeight: "bold" }}>
-                  {myScore}점으로 우리 회사 평균 {companyScore}점 대비{" "}
-                  {parseFloat((myScore - companyScore).toFixed(1))}점{" "}
-                  {myScore > companyScore ? "높게" : "낮게"} 나타났습니다.
+                  {myAverage}점으로 우리 회사 평균 {companyAverage}점 대비{" "}
+                  {parseFloat((myAverage - companyAverage).toFixed(1))}점{" "}
+                  {myAverage > companyAverage ? "높게" : "낮게"} 나타났습니다.
                 </b>{" "}
                 (100점 만점 환산) 나의 마음 건강이 전반적으로 균형감 있게
                 튼튼한지, 어떤 부분이 강하고 약하게 나타나는지 살펴보세요.
               </SectionIntro>
-              <RadarChart
-                companyAverage={companyAverage}
-                myAverage={myAverage}
-              />
+              <RadarChart companyScore={companyScore} myScore={myScore} />
               <SummaryBox>
                 <SummaryText>
                   <b style={{ fontWeight: "600", letterSpacing: "-0.54px" }}>
                     💡 나의 마음 건강 평균
                   </b>{" "}
-                  : 긍정정서 {myAverage[0]}, 몰입 {myAverage[1]}, 관계{" "}
-                  {myAverage[2]}, 의미 {myAverage[3]}, 성취 {myAverage[4]}, 활력{" "}
-                  {myAverage[5]}
+                  : 긍정정서 {myScore[0]}, 몰입 {myScore[1]}, 관계 {myScore[2]},
+                  의미 {myScore[3]}, 성취 {myScore[4]}, 활력 {myScore[5]}
                 </SummaryText>
               </SummaryBox>
             </>
@@ -484,7 +451,7 @@ function CheckupReport() {
           있네!' 라며 스스로를 칭찬해 주세요! 낮게 나타나는 영역은 무엇인가요?
           어떻게 하면 더 나아질 수 있을지 의도적인 행동으로 챙겨보세요.
         </SectionIntro>
-        <WeeklyChart result={result} week={week} />
+        <WeeklyChart results={result.slice(week - 1, week + 1)} week={week} />
 
         <ChartContainer>
           {permav.map((item, index) => (
@@ -502,7 +469,7 @@ function CheckupReport() {
           ))}
         </ChartContainer>
 
-        <CheckupReview review={result[week === 4 ? 3 : week][8]} />
+        <CheckupReview review={result[result.length - 1].answers[8]} />
         <CheckupArea />
 
         {intervention && <CheckupRecommend intervention={intervention} />}

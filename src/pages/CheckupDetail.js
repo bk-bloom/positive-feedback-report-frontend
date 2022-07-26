@@ -60,8 +60,9 @@ const Button = styled.button`
 
 function CheckupDetail() {
   const { collectorId } = useParams();
+  console.log(useParams());
   const {
-    state: { week, result },
+    state: { week, results, collectors },
   } = useLocation();
   const navigate = useNavigate();
   //   const [checkupResponse, setCheckupResponse] =
@@ -69,7 +70,7 @@ function CheckupDetail() {
   const [responses, setResponses] = useState();
   const countRef = useRef(0);
 
-  // console.log("Checkup Detail State =>", week, result);
+  // console.log("Checkup Detail State =>", week, results);
 
   const getCheckupResponseFromDB = async (email) => {
     const response = await axios.get(
@@ -78,75 +79,55 @@ function CheckupDetail() {
     return response.data[0];
   };
 
-  const handleClick = async (email, name) => {
-    // const response = await getCheckupResponseFromDB(email);
-    // console.log(response, result);
-    let dest = [];
+  const handleClick = async (email) => {
+    const dest = [];
 
-    // if (response.length === 0) {
-    //   // state로 리포트 생성
-    //   console.log("Data from State!");
-    //   for (let i = 0; i <= week; i++) {
-    //     dest.push(result[i][email]);
-    //   }
-    // } else {
-    //   // DB 데이터로 리포트 생성
-    //   console.log("Data from DB!", response);
-    //   for (let i = 0; i <= week; i++) {
-    //     dest.push(response[`week${i + 1}`]);
-    //   }
-    // }
     for (let i = 0; i <= week; i++) {
-      dest.push(result[i][email] ? result[i][email] : []);
+      let isExist = false;
+      for (let j = 0; j < results.length; j++) {
+        if (
+          results[j].collectorId === collectors[i] &&
+          results[j].email === email
+        ) {
+          isExist = true;
+          dest.push(results[j]);
+          break;
+        }
+      }
+      if (!isExist) {
+        dest.push(null);
+      }
     }
+
     navigate("report", {
       state: {
-        name,
+        email,
         week,
         result: dest,
       },
     });
   };
-  //   useEffect(() => {
-  //     const fetch = async () => {
-  //       const response = await getCheckupResponseFromDB(email);
-  //       setResponses(response);
-  //     };
-  //     fetch();
-  //   });
-  //   console.log("Checkup Detail => ", checkupResponse);
+
+  // console.log("Checkup Detail => ", checkupResponse);
   return (
     <Container>
       <Title>{week + 1}주차 리포트</Title>
       <List>
-        {Object.keys(result[week === 4 ? 3 : week]).length > 0 &&
-          Object.keys(result[week === 4 ? 3 : week]).map((email, index) => {
+        {results
+          .filter((r) => r.collectorId === collectorId)
+          .map((result, index) => {
             return (
               <Item key={index}>
                 <Column>
-                  <span>{result[week][email][0]}</span>
-                  <span>{result[week][email][1]}</span>
+                  <span>{result.name}</span>
+                  <span>{result.email}</span>
                 </Column>
                 <Column>
-                  <Button
-                    onClick={() =>
-                      handleClick(
-                        email,
-                        result[week === 4 ? 3 : week][email][0]
-                      )
-                    }
-                  >
+                  <Button onClick={() => handleClick(result.email)}>
                     {/* <Button onClick={() => getCheckupResponseFromDB(email)}> */}
                     리포트 보기
                   </Button>
                 </Column>
-                {/* {[0, 1, 2, 3, 4].map((week) => (
-                  <Column key={week}>
-                    <Button onClick={() => handleClick(item, week)}>
-                      {week < 4 ? `${week + 1}주차 리포트` : "월간 리포트"}
-                    </Button>
-                  </Column>
-                ))} */}
               </Item>
             );
           })}

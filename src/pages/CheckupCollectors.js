@@ -97,6 +97,21 @@ function CheckupCollectors() {
 
   const countRef = useRef(0);
 
+  const getCheckupResults = async () => {
+    setIsLoading(true);
+    const response = await axios.get(
+      `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/results`,
+      {
+        params: {
+          id: projectId,
+          collectors,
+        },
+      }
+    );
+    setCheckupCollectorResponses(response.data);
+    setIsLoading(false);
+  };
+
   async function getResponses() {
     setIsLoading(true);
     // Get Data from SurveyMonkey
@@ -134,7 +149,8 @@ function CheckupCollectors() {
       // setCheckupCollectorResponses(data);
       // setLastUpdate(new Date().toTimeString().split(" ")[0]);
       // setIsLoading(false);
-      await getResponses();
+      // await getResponses();
+      await getCheckupResults();
     }
     async function fetchDataFromDB() {
       setIsLoading(true);
@@ -148,7 +164,8 @@ function CheckupCollectors() {
           fetchData();
         } else {
           // Load Data from DB
-          fetchDataFromDB();
+          // fetchDataFromDB();
+          fetchData();
         }
         countRef.current += 1;
       }
@@ -167,13 +184,15 @@ function CheckupCollectors() {
     navigate(id, {
       state: {
         week: index,
-        result: checkupCollectorResponses,
+        results: checkupCollectorResponses,
+        collectors: collectors.slice(0, index + 1),
       },
     });
   };
 
   const handleRefreshClick = async () => {
-    await getResponses();
+    // await getResponses();
+    await getCheckupResults();
   };
 
   const handleSendReportClick = async (collectorId, index) => {
@@ -238,7 +257,9 @@ function CheckupCollectors() {
                     >
                       [
                       {checkupCollectorResponses.length !== 0 &&
-                        Object.keys(checkupCollectorResponses[index]).length}
+                        checkupCollectorResponses.filter(
+                          (r) => r.collectorId === collector
+                        ).length}
                       명 응답]
                     </span>
                   </Column>
