@@ -196,26 +196,31 @@ function CheckupCollectors() {
   };
 
   const handleSendReportClick = async (collectorId, index) => {
-    //   setIsLoading(true);
-    //   let emails = [];
-    //   if (index === 3) {
-    //     for (let i = 0; i < checkupCollectorResponses.length; i++) {
-    //       for (const email of Object.keys(checkupCollectorResponses[i])) {
-    //         if (!emails.includes(email)) {
-    //           emails.push(email);
-    //         }
-    //       }
-    //     }
-    //   } else {
-    //     emails = Object.keys(checkupCollectorResponses[index]);
-    //   }
-    //   const response = await updateMailchimpStatus(index, emails);
+    setIsLoading(true);
+    let emails = [];
+    if (index === 3) {
+      for (let i = 0; i < checkupCollectorResponses.length; i++) {
+        for (const email of Object.keys(checkupCollectorResponses[i])) {
+          if (!emails.includes(email)) {
+            emails.push(email);
+          }
+        }
+      }
+    } else {
+      emails = checkupCollectorResponses
+        .filter((result) => {
+          return result.collectorId === collectorId;
+        })
+        .map((item) => item.email);
+    }
+    console.log(emails);
+    const response = await updateMailchimpStatus(index, emails, collectorId);
     setIsLoading(false);
-    console.log(
-      `Send Report at, ${new Date(
-        projectSendReportDates[index]
-      ).toLocaleString()}`
-    );
+    // console.log(
+    //   `Send Report at, ${new Date(
+    //     projectSendReportDates[index]
+    //   ).toLocaleString()}`
+    // );
   };
   console.log(checkupCollectorResponses);
   return (
