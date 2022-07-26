@@ -361,12 +361,11 @@ export const loadResponsesFromDB = async () => {
   return response.data;
 };
 
-export const updateMailchimpStatus = async (index, emails, collectorId) => {
+export const updateMailchimpStatus = async (index, collectorId) => {
   const emailResponse = await axios.post(
     `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/email`,
     JSON.stringify({
       week: index + 1,
-      data: emails,
       collectorId,
     }),
     {
@@ -375,18 +374,7 @@ export const updateMailchimpStatus = async (index, emails, collectorId) => {
   );
   // console.log(emailResponse);
 
-  await addMemberTagInMailchimp(emails, index);
-};
-
-const addMemberTagInMailchimp = async (emails, index) => {
-  const response = await axios.post(
-    `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/tag`,
-    {
-      emails: emails,
-      week: index + 1,
-    }
-  );
-  return response.data;
+  // await addMemberTagInMailchimp(index);
 };
 
 export const getProjectsFromDB = async () => {

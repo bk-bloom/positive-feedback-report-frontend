@@ -267,16 +267,9 @@ const ColorSpan = styled.span`
   letter-spacing: normal;
 `;
 
-const createdAt = [
-  { collectedAt: "2022.8.22(월)", createdAt: "2022.8.23(화)" },
-  { collectedAt: "2022.8.29(월)", createdAt: "2022.8.30(화)" },
-  { collectedAt: "2022.9.5(월)", createdAt: "2022.9.6(화)" },
-  { collectedAt: "2022.9.12(월)", createdAt: "2022.9.13(화)" },
-];
-
 function CheckupReport() {
   const {
-    state: { email, week, result, prevResult },
+    state: { email, week, result },
   } = useLocation();
   const { projectId } = useParams();
 

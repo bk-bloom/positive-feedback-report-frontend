@@ -214,7 +214,7 @@ function CheckupCollectors() {
         .map((item) => item.email);
     }
     console.log(emails);
-    const response = await updateMailchimpStatus(index, emails, collectorId);
+    const response = await updateMailchimpStatus(index, collectorId);
     setIsLoading(false);
     // console.log(
     //   `Send Report at, ${new Date(
