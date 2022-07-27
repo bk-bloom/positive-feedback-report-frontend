@@ -273,7 +273,7 @@ function CheckupReport() {
   } = useLocation();
   const { projectId } = useParams();
 
-  console.log("Checkup Report State =>", useLocation().state);
+  // console.log("Checkup Report State =>", useLocation().state);
 
   const [companyAverage, setCompanyAverage] = useState(0);
   const [myAverage, setMyAverage] = useState(0);
@@ -335,7 +335,8 @@ function CheckupReport() {
       const response = await axios.get(
         `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/projects?id=${projectId}`
       );
-      const date = response.data[0].sendReportDates[week];
+      const date = response.data.filter((item) => item.id === projectId)[0]
+        .sendReportDates[week];
       setSendDate(`${new Date(date).toLocaleDateString()} (${getDay(date)})`);
     };
 
