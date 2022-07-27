@@ -112,6 +112,22 @@ function CheckupCollectors() {
     setIsLoading(false);
   };
 
+  const handleUpdateClick = async () => {
+    setIsLoading(true);
+    const response = await axios.get(
+      `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/update`,
+      {
+        params: {
+          projectId,
+          collectors,
+        },
+      }
+    );
+    console.log(response.data);
+    setCheckupCollectorResponses(response.data);
+    setIsLoading(false);
+  };
+
   async function getResponses() {
     setIsLoading(true);
     // Get Data from SurveyMonkey
@@ -190,11 +206,6 @@ function CheckupCollectors() {
     });
   };
 
-  const handleRefreshClick = async () => {
-    // await getResponses();
-    await getCheckupResults();
-  };
-
   const handleSendReportClick = async (collectorId, index) => {
     setIsLoading(true);
     let emails = [];
@@ -214,7 +225,7 @@ function CheckupCollectors() {
         .map((item) => item.email);
     }
     console.log(emails);
-    const response = await updateMailchimpStatus(index, collectorId);
+    const response = await updateMailchimpStatus(index, projectId, collectorId);
     setIsLoading(false);
     // console.log(
     //   `Send Report at, ${new Date(
@@ -222,7 +233,7 @@ function CheckupCollectors() {
     //   ).toLocaleString()}`
     // );
   };
-  console.log(checkupCollectorResponses);
+  // console.log(checkupCollectorResponses, collectors);
   return (
     <Container>
       <Wrapper>
@@ -241,7 +252,7 @@ function CheckupCollectors() {
             color: "#ff812c",
             width: "80px",
           }}
-          onClick={handleRefreshClick}
+          onClick={handleUpdateClick}
         >
           새로고침
         </Button>

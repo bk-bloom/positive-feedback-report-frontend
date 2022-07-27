@@ -361,11 +361,12 @@ export const loadResponsesFromDB = async () => {
   return response.data;
 };
 
-export const updateMailchimpStatus = async (index, collectorId) => {
+export const updateMailchimpStatus = async (index, projectId, collectorId) => {
   const emailResponse = await axios.post(
     `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/email`,
     JSON.stringify({
       week: index + 1,
+      projectId,
       collectorId,
     }),
     {
