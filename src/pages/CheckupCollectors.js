@@ -79,14 +79,26 @@ const Button = styled.button`
 
     // box-shadow: 0px 0px 6px -1px #ff812c;
   }
+  &:disabled {
+    cursor: default;
+    opacity: 0.5;
+    // background: var(--button-bg-color, #025ce2);
+  }
   // transition: all 0.2s;
 `;
 
 function CheckupCollectors() {
   const { projectId } = useParams();
   const {
-    state: { collectors, projectTitle, projectSendReportDates },
+    state: {
+      collectors,
+      projectTitle,
+      projectSendReportDates,
+      audienceId,
+      campaignIds,
+    },
   } = useLocation();
+  // console.log(audienceId, campaignIds);
   const navigate = useNavigate();
 
   const [checkupCollectorResponses, setCheckupCollectorResponses] = useState(
@@ -226,8 +238,16 @@ function CheckupCollectors() {
         })
         .map((item) => item.email);
     }
-    console.log(emails);
-    const response = await updateMailchimpStatus(index, projectId, collectorId);
+    // console.log(emails);
+    // console.log(audienceId, campaignIds[index], projectSendReportDates[index]);
+    const response = await updateMailchimpStatus(
+      index,
+      projectId,
+      collectorId,
+      audienceId,
+      campaignIds[index],
+      projectSendReportDates[index]
+    );
     setIsLoading(false);
     // console.log(
     //   `Send Report at, ${new Date(
@@ -236,6 +256,7 @@ function CheckupCollectors() {
     // );
   };
   // console.log(checkupCollectorResponses, collectors);
+
   return (
     <Container>
       <Wrapper>
@@ -286,9 +307,16 @@ function CheckupCollectors() {
                       상세보기
                     </Button>
                     <Button
+                      disabled={
+                        new Date() > new Date(projectSendReportDates[index])
+                      }
                       onClick={() => handleSendReportClick(collector, index)}
                     >
-                      리포트 예약 발송
+                      {new Date() > new Date(projectSendReportDates[index])
+                        ? `${new Date(
+                            projectSendReportDates[index]
+                          ).toLocaleString()} 발송`
+                        : "리포트 예약 발송"}
                     </Button>
                   </Column>
                 </Item>

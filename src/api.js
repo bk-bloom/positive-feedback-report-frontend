@@ -361,13 +361,23 @@ export const loadResponsesFromDB = async () => {
   return response.data;
 };
 
-export const updateMailchimpStatus = async (index, projectId, collectorId) => {
+export const updateMailchimpStatus = async (
+  index,
+  projectId,
+  collectorId,
+  audienceId,
+  campaignId,
+  scheduleDate
+) => {
   const emailResponse = await axios.post(
     `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/email`,
     JSON.stringify({
       week: index + 1,
       projectId,
       collectorId,
+      audienceId,
+      campaignId,
+      scheduleDate,
     }),
     {
       headers: { "Content-Type": "Application/json" },
@@ -382,6 +392,6 @@ export const getProjectsFromDB = async () => {
   const response = await axios.get(
     `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/projects`
   );
-  console.log(response.data);
+  // console.log(response.data);
   return response.data;
 };

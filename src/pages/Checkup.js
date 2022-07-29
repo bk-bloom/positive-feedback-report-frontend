@@ -87,10 +87,18 @@ function Checkup() {
     projectId,
     collectors,
     projectTitle,
-    projectSendReportDates
+    projectSendReportDates,
+    audienceId,
+    campaignIds
   ) => {
     navigate(projectId, {
-      state: { collectors, projectTitle, projectSendReportDates },
+      state: {
+        collectors,
+        projectTitle,
+        projectSendReportDates,
+        audienceId,
+        campaignIds,
+      },
     });
   };
   return (
@@ -107,7 +115,9 @@ function Checkup() {
                     project.id,
                     project.collectors,
                     project.name,
-                    project.sendReportDates
+                    project.sendReportDates,
+                    project.audienceId,
+                    project.campaignIds
                   )
                 }
               >

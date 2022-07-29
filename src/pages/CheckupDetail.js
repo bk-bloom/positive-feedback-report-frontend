@@ -60,7 +60,7 @@ const Button = styled.button`
 
 function CheckupDetail() {
   const { collectorId } = useParams();
-  console.log(useParams());
+  // console.log(useParams());
   const {
     state: { week, results, collectors },
   } = useLocation();
