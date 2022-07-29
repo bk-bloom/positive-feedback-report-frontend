@@ -74,8 +74,10 @@ function Checkup() {
     async function fetchData() {
       setIsLoading(true);
       const data = await getProjectsFromDB();
-      setProjectList(data);
-      setIsLoading(false);
+      setTimeout(() => {
+        setProjectList(data);
+        setIsLoading(false);
+      }, 500);
     }
 
     fetchData();

@@ -108,8 +108,10 @@ function CheckupCollectors() {
         },
       }
     );
-    setCheckupCollectorResponses(response.data);
-    setIsLoading(false);
+    setTimeout(() => {
+      setCheckupCollectorResponses(response.data);
+      setIsLoading(false);
+    }, 500);
   };
 
   const handleUpdateClick = async () => {
