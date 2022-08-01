@@ -16,29 +16,29 @@ import { Reset } from "styled-reset";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <RecoilRoot>
-        <Reset />
-        <Sidebar />
-        <Routes>
-          <Route path="/" element={<PositiveFeedback />} />
-          <Route path="/positive" element={<PositiveFeedback />} />
-          <Route path="/positive/report" element={<Report />} />
-          <Route path="/checkup" element={<Checkup />} />
-          <Route path="/checkup/:projectId" element={<CheckupCollectors />} />
-          <Route
-            path="/checkup/:projectId/:collectorId"
-            element={<CheckupDetail />}
-          />
-          <Route
-            path="/checkup/:projectId/:collectorId/report"
-            element={<CheckupReport />}
-          />
-        </Routes>
-      </RecoilRoot>
-    </BrowserRouter>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <BrowserRouter>
+    <RecoilRoot>
+      <Reset />
+      <Sidebar />
+      <Routes>
+        <Route path="/" element={<PositiveFeedback />} />
+        <Route path="/positive" element={<PositiveFeedback />} />
+        <Route path="/positive/report" element={<Report />} />
+        <Route path="/checkup" element={<Checkup />} />
+        <Route path="/checkup/:projectId" element={<CheckupCollectors />} />
+        <Route
+          path="/checkup/:projectId/:collectorId"
+          element={<CheckupDetail />}
+        />
+        <Route
+          path="/checkup/:projectId/:collectorId/report"
+          element={<CheckupReport />}
+        />
+      </Routes>
+    </RecoilRoot>
+  </BrowserRouter>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

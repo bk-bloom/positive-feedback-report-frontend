@@ -218,6 +218,10 @@ const CommentSectionList = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  position: relative;
+  height: 700px;
+  overflow-y: hidden;
+  /* border: 1px solid black; */
 `;
 
 const CommentDivider = styled.div`
@@ -240,7 +244,7 @@ const CommentSectionItem = styled.p`
   letter-spacing: -0.6px;
   text-align: left;
   color: #666;
-  // border-bottom: 1px solid black;
+  /* border: 1px solid black; */
 `;
 
 const DownloadButton = styled.div`
@@ -258,25 +262,52 @@ const DownloadButton = styled.div`
   cursor: pointer;
 `;
 
+const comments = [
+  "1번째입니다.",
+  "2번째입니다.",
+  "3번째입니다.",
+  "4번째입니다.",
+  "5번째입니다.",
+  "6번째입니다.",
+  "7번째입니다.",
+  "8번째입니다.",
+  "9번째입니다.",
+  "10번째입니다.",
+  "11번째입니다.",
+  "12번째입니다.",
+  "13번째입니다.",
+  "14번째입니다.",
+  "15번째입니다.",
+];
+
 function Report() {
   const [reportData, setReportData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingMsg, setLoadingMsg] = useState("리포트 생성중...");
-
+  const [pages, setPages] = useState(1);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isLastPage, setIsLastPage] = useState(false);
+  const [offsets, setOffsets] = useState([0]);
   const printRef = useRef();
+  const commentRef = useRef([]);
+  const counterRef = useRef(0);
+
   const location = useLocation();
 
   useEffect(() => {
-    setReportData([
-      location.state.data.strengthWords,
-      location.state.data.valuesWords,
-      location.state.data.appreciateComments,
-      location.state.data.expectComments,
-    ]);
+    if (counterRef.current === 0) {
+      setReportData([
+        location.state.data.strengthWords,
+        location.state.data.valuesWords,
+        location.state.data.appreciateComments,
+        location.state.data.expectComments,
+      ]);
 
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 100);
+      counterRef.current += 1;
+    }
   }, []);
 
   const handleDownloadPdf = async () => {
@@ -328,6 +359,41 @@ function Report() {
     pdf.save(`긍정 피드백 설문 결과 - ${location.state.name}.pdf`);
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    // console.log(
+    //   pages,
+    //   currentIndex,
+    //   commentRef.current.length,
+    //   offsets,
+    //   offsets.includes(currentIndex)
+    // );
+    // if (counterRef.current === 1) {
+
+    let isLastPage = false;
+    setTimeout(() => {
+      let height = 0;
+
+      for (let i = currentIndex; i < commentRef.current.length; i++) {
+        height += commentRef.current[i].getBoundingClientRect().height;
+        if (height > 700) {
+          setCurrentIndex(i);
+          // setPages((prev) => prev + 1);
+          // alert(`Overflowed 600 at ${i}th element`);
+          if (!offsets.includes(i)) {
+            setOffsets((prev) => [...prev, i]);
+            setPages((prev) => prev + 1);
+          }
+          isLastPage = false;
+          break;
+        } else {
+          isLastPage = true;
+        }
+      }
+      setIsLastPage(isLastPage);
+      // console.log("is last page =>", isLastPage, pages);
+    }, 500);
+  }, [pages]);
 
   return (
     <Container isLoading={isLoading}>
@@ -407,45 +473,72 @@ function Report() {
                 </Section>
               </SectionContainer>
             </A4>
-            <A4 type="comment">
-              <Header>
-                {location.state.name}{" "}
-                <b style={{ fontWeight: "normal" }}>님을 위한</b>
-                <br />
-                긍정 피드백 결과<b style={{ fontWeight: "normal" }}>입니다.</b>
-                <HeaderBottomBar />
-              </Header>
-              <CommentContainer>
-                <CommentSection>
-                  <SectionHeader style={{ width: "331px" }}>
-                    <SectionHeaderText>
-                      감사와 응원을 보냅니다 😊
-                    </SectionHeaderText>
-                  </SectionHeader>
-                  <CommentSectionList>
-                    {reportData[2].map((comment, index) => (
+            {new Array(pages).fill(0).map((item, i) => (
+              <A4 type="comment" key={i}>
+                <Header>
+                  {location.state.name}{" "}
+                  <b style={{ fontWeight: "normal" }}>님을 위한</b>
+                  <br />
+                  긍정 피드백 결과
+                  <b style={{ fontWeight: "normal" }}>입니다.</b>
+                  <HeaderBottomBar />
+                </Header>
+                <CommentContainer>
+                  <CommentSection>
+                    <SectionHeader style={{ width: "331px" }}>
+                      <SectionHeaderText>
+                        감사와 응원을 보냅니다 😊
+                      </SectionHeaderText>
+                    </SectionHeader>
+                    <CommentSectionList>
+                      {reportData[2].map((comment, index) => (
+                        <div key={index}>
+                          <CommentSectionItem>{comment}</CommentSectionItem>
+                          <CommentDivider />
+                        </div>
+                      ))}
+                    </CommentSectionList>
+                  </CommentSection>
+                  <CommentSection>
+                    <SectionHeader style={{ width: "331px" }}>
+                      <SectionHeaderText>
+                        앞으로 기대합니다 🙏
+                      </SectionHeaderText>
+                    </SectionHeader>
+                    <CommentSectionList>
+                      {comments
+                        .slice(
+                          isLastPage ? offsets[i] : currentIndex,
+                          i + 1 < comments.length
+                            ? offsets[i + 1]
+                            : comments.length
+                        )
+                        .map((comment, index) => {
+                          return (
+                            <div
+                              key={index}
+                              ref={(el) =>
+                                (commentRef.current[currentIndex + index] = el)
+                              }
+                            >
+                              <CommentSectionItem>
+                                {comments[offsets[i] + index]}
+                              </CommentSectionItem>
+                              <CommentDivider />
+                            </div>
+                          );
+                        })}
+                      {/* {reportData[3].map((comment, index) => (
                       <div key={index}>
                         <CommentSectionItem>{comment}</CommentSectionItem>
                         <CommentDivider />
                       </div>
-                    ))}
-                  </CommentSectionList>
-                </CommentSection>
-                <CommentSection>
-                  <SectionHeader style={{ width: "331px" }}>
-                    <SectionHeaderText>앞으로 기대합니다 🙏</SectionHeaderText>
-                  </SectionHeader>
-                  <CommentSectionList>
-                    {reportData[3].map((comment, index) => (
-                      <div key={index}>
-                        <CommentSectionItem>{comment}</CommentSectionItem>
-                        <CommentDivider />
-                      </div>
-                    ))}
-                  </CommentSectionList>
-                </CommentSection>
-              </CommentContainer>
-            </A4>
+                    ))} */}
+                    </CommentSectionList>
+                  </CommentSection>
+                </CommentContainer>
+              </A4>
+            ))}
           </Wrapper>
           <DownloadButton onClick={handleDownloadPdf}>
             <span>PDF</span>
