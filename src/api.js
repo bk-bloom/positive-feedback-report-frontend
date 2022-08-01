@@ -369,21 +369,43 @@ export const updateMailchimpStatus = async (
   campaignId,
   scheduleDate
 ) => {
-  const emailResponse = await axios.post(
-    `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/email`,
-    JSON.stringify({
-      week: index + 1,
-      projectId,
-      collectorId,
-      audienceId,
-      campaignId,
-      scheduleDate,
-    }),
-    {
-      headers: { "Content-Type": "Application/json" },
+  try {
+    const emailResponse = await axios.post(
+      `${process.env.REACT_APP_SERVER_DOMAIN}/checkup/email`,
+      JSON.stringify({
+        week: index + 1,
+        projectId,
+        collectorId,
+        audienceId,
+        campaignId,
+        scheduleDate,
+      }),
+      {
+        headers: { "Content-Type": "Application/json" },
+      }
+    );
+    // console.log(emailResponse);
+    alert(`${new Date(scheduleDate).toLocaleString()} 에 리포트가 발송됩니다.`);
+  } catch (err) {
+    // console.log(err.response);
+    const {
+      status,
+      data: { detail },
+    } = err.response;
+    if (status === 400) {
+      if (detail.includes("unschedule")) {
+        alert(
+          "[3002] 이미 예약이 되었습니다. 예약을 취소하고 다시 발송하세요."
+        );
+      } else {
+        alert("[3001] 시스템 오류입니다.");
+      }
+
+      return;
     }
-  );
-  // console.log(emailResponse);
+    alert("[3000] 시스템 오류입니다.");
+    return;
+  }
 
   // await addMemberTagInMailchimp(index);
 };
